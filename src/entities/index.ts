@@ -1,9 +1,15 @@
 import {PermissionEntity} from "./permission.entity";
 import {RoleEntity} from "./role.entity";
 import {UserEntity} from "./user.entity";
+import {PersonaEntity} from "./persona.entity";
+import {EmpleadoEntity} from "./empleado.entity";
+import {TipoEmpleadoEntity} from "./tipoEmpleado.entity";
 
 export const entities = [
     PermissionEntity,
     RoleEntity,
-    UserEntity
+    UserEntity,
+    PersonaEntity,
+    EmpleadoEntity,
+    TipoEmpleadoEntity
 ];
