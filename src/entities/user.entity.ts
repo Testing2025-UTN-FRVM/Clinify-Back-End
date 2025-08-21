@@ -6,8 +6,7 @@ import {
     Index,
     JoinTable,
     ManyToMany,
-    PrimaryGeneratedColumn,
-    TableInheritance
+    PrimaryGeneratedColumn
 } from 'typeorm';
 import {RoleEntity} from "./role.entity";
 import { hashSync } from 'bcrypt';
