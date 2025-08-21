@@ -7,6 +7,10 @@ import {UsersController} from "./users/users.controller";
 import {AuthGuard} from "./middlewares/auth.middleware";
 import {JwtService} from "./jwt/jwt.service";
 import {UsersService} from "./users/users.service";
+import { EmpleadoService } from './empleado/empleado.service';
+import { EmpleadoController } from './empleado/empleado.controller';
+import { TipoEmpleadoService } from './tipo-empleado/tipo-empleado.service';
+import { TipoEmpleadoController } from './tipo-empleado/tipo-empleado.controller';
 
 
 
@@ -32,7 +36,7 @@ import {UsersService} from "./users/users.service";
     }),
     TypeOrmModule.forFeature(entities),
     ],
-    controllers: [AppController, UsersController],
-    providers: [AuthGuard, JwtService, UsersService],
+    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController],
+    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService],
 })
 export class AppModule {}

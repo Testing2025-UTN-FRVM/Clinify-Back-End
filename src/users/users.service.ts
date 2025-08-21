@@ -4,7 +4,7 @@ import {UserEntity} from "../entities/user.entity";
 import {Repository} from "typeorm";
 import { hashSync, compareSync } from 'bcrypt';
 import {JwtService} from "../jwt/jwt.service";
-import {UserI} from "../interfaces/user.interface";
+import {UserI} from "../interfaces/JWT/user.interface";
 import {RegisterDTO} from "../interfaces/register.dto";
 import {LoginDTO} from "../interfaces/login.dto";
 

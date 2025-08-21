@@ -1,7 +1,7 @@
 import {Body, Controller, Get, Post, Req, UseGuards} from '@nestjs/common';
 import { AuthGuard } from '../middlewares/auth.middleware';
 import {UsersService} from "./users.service";
-import * as requestUser from 'src/interfaces/request-user';
+import * as requestUser from 'src/interfaces/JWT/request-user';
 import {LoginDTO} from "../interfaces/login.dto";
 import {RegisterDTO} from "../interfaces/register.dto";
 

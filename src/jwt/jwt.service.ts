@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { sign, verify } from 'jsonwebtoken';
 import dayjs from 'dayjs';
-import { Payload } from 'src/interfaces/payload';
+import { Payload } from 'src/interfaces/JWT/payload';
 @Injectable()
 export class JwtService {
     // config.ts
