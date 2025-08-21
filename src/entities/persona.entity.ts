@@ -1,8 +1,11 @@
-import {ChildEntity, Column, Index} from "typeorm";
-import {UserEntity} from "./user.entity";
+import {Entity, Column, Index, TableInheritance, BaseEntity, PrimaryGeneratedColumn} from "typeorm";
 
-@ChildEntity('persona')
-export class PersonaEntity extends UserEntity {
+@Entity('persona')
+@TableInheritance({ column: { type: 'varchar', name: 'type' } })
+export class PersonaEntity extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @Column({nullable: false})
     nombre: string;
 

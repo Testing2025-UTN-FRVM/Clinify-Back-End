@@ -1,6 +1,6 @@
-import { UserI } from '../interfaces/user.interface';
+import { UserI } from '../interfaces/JWT/user.interface';
 import {
-    BaseEntity,
+    BaseEntity, BeforeInsert, BeforeUpdate,
     Column,
     Entity,
     Index,
@@ -10,9 +10,9 @@ import {
     TableInheritance
 } from 'typeorm';
 import {RoleEntity} from "./role.entity";
+import { hashSync } from 'bcrypt';
 
 @Entity('users')
-@TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class UserEntity extends BaseEntity implements UserI {
     @PrimaryGeneratedColumn()
     id: number;
@@ -28,5 +28,13 @@ export class UserEntity extends BaseEntity implements UserI {
 
     get permissionCodes(): string[] {
         return this.roles?.flatMap(role => role.permissions.map(permission => permission.code)) || [];
+    }
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword() {
+        if (this.password && this.password.startsWith('$2')) {
+            this.password = await hashSync(this.password, 10);
+        }
     }
 }
