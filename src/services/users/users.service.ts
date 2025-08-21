@@ -1,12 +1,12 @@
 import {HttpException, Injectable, NotFoundException, UnauthorizedException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
-import {UserEntity} from "../entities/user.entity";
+import {UserEntity} from "../../entities/user.entity";
 import {Repository} from "typeorm";
 import { hashSync, compareSync } from 'bcrypt';
-import {JwtService} from "../jwt/jwt.service";
-import {UserI} from "../interfaces/JWT/user.interface";
-import {RegisterDTO} from "../interfaces/register.dto";
-import {LoginDTO} from "../interfaces/login.dto";
+import {JwtService} from "../../jwt/jwt.service";
+import {UserI} from "../../interfaces/JWT/user.interface";
+import {RegisterDTO} from "../../interfaces/register.dto";
+import {LoginDTO} from "../../interfaces/login.dto";
 
 @Injectable()
 export class UsersService {
