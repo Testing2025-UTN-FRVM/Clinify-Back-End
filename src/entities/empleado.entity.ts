@@ -1,4 +1,4 @@
-import {ChildEntity, JoinColumn, ManyToMany, ManyToOne, OneToOne} from "typeorm";
+import {ChildEntity, JoinColumn, ManyToOne, OneToOne} from "typeorm";
 import {PersonaEntity} from "./persona.entity";
 import {TipoEmpleadoEntity} from "./tipoEmpleado.entity";
 import {UserEntity} from "./user.entity";
