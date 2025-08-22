@@ -1,7 +1,9 @@
-import {ChildEntity, JoinColumn, ManyToOne, OneToOne} from "typeorm";
+import {ChildEntity, JoinColumn, ManyToMany, ManyToOne, OneToOne} from "typeorm";
 import {PersonaEntity} from "./persona.entity";
 import {TipoEmpleadoEntity} from "./tipoEmpleado.entity";
 import {UserEntity} from "./user.entity";
+import {EspecialidadEntity} from "./especialidad.entity";
+import {ConsultorioEntity} from "./consultorio.entity";
 
 @ChildEntity('empleado')
 export class EmpleadoEntity extends PersonaEntity {
@@ -13,4 +15,12 @@ export class EmpleadoEntity extends PersonaEntity {
     @OneToOne(() => UserEntity, { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: UserEntity;
+
+    @ManyToOne(()=> EspecialidadEntity, (especialidad) => especialidad.empleados)
+    @JoinColumn({name: 'especialidad_id'})
+    especialidad: EspecialidadEntity;
+
+    @ManyToOne(()=> ConsultorioEntity, (consultorio) => consultorio.empleados)
+    @JoinColumn({name: 'consultorio_id'})
+    consultorio: ConsultorioEntity;
 }
