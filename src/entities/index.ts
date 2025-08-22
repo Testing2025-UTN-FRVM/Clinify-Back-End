@@ -5,6 +5,8 @@ import {PersonaEntity} from "./persona.entity";
 import {EmpleadoEntity} from "./empleado.entity";
 import {TipoEmpleadoEntity} from "./tipoEmpleado.entity";
 import {PacienteEntity} from "./paciente.entity";
+import {ConsultorioEntity} from "./consultorio.entity";
+import {EspecialidadEntity} from "./especialidad.entity";
 
 export const entities = [
     PermissionEntity,
@@ -13,5 +15,7 @@ export const entities = [
     PersonaEntity,
     EmpleadoEntity,
     TipoEmpleadoEntity,
-    PacienteEntity
+    PacienteEntity,
+    ConsultorioEntity,
+    EspecialidadEntity
 ];
