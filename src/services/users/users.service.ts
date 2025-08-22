@@ -5,7 +5,6 @@ import {Repository} from "typeorm";
 import { hashSync, compareSync } from 'bcrypt';
 import {JwtService} from "../../jwt/jwt.service";
 import {UserI} from "../../interfaces/JWT/user.interface";
-import {RegisterDTO} from "../../interfaces/register.dto";
 import {LoginDTO} from "../../interfaces/login.dto";
 
 @Injectable()
@@ -28,17 +27,17 @@ export class UsersService {
         return true;
     }
 
-    async register(body: RegisterDTO): Promise<{status: string}> {
-        try {
-            const user = new UserEntity();
-            Object.assign(user, body);
-            user.password = hashSync(user.password, 10);
-            await this.userRepository.save(user);
-            return {status: "created"};
-        }catch (error) {
-            throw new HttpException(error.message, 500);
-        }
-    }
+    // async register(body: RegisterDTO): Promise<{status: string}> {
+    //     try {
+    //         const user = new UserEntity();
+    //         Object.assign(user, body);
+    //         user.password = hashSync(user.password, 10);
+    //         await this.userRepository.save(user);
+    //         return {status: "created"};
+    //     }catch (error) {
+    //         throw new HttpException(error.message, 500);
+    //     }
+    // }
 
     async login(body: LoginDTO) {
         const user = await this.findByEmail(body.email);

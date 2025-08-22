@@ -2,7 +2,7 @@ import {IsDate, IsNotEmpty, IsString} from "class-validator";
 
 export type TipoUsuario = 'user' | 'empleado' | 'paciente';
 
-export class RegisterDTO {
+export class RegistrarEmpleadoDTO {
     tipo: TipoUsuario;
 
     @IsString()
