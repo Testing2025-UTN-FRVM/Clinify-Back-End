@@ -7,6 +7,10 @@ import {TipoEmpleadoEntity} from "./tipoEmpleado.entity";
 import {PacienteEntity} from "./paciente.entity";
 import {ConsultorioEntity} from "./consultorio.entity";
 import {EspecialidadEntity} from "./especialidad.entity";
+import {EstadoTurnoEntity} from "./estadoTurno.entity";
+import {GrupoSanguineoEntity} from "./grupoSanguineo.entity";
+import {HistoriaClinicaEntity} from "./historiaClinica.entity";
+import {TurnoEntity} from "./turno.entity";
 
 export const entities = [
     PermissionEntity,
@@ -17,5 +21,9 @@ export const entities = [
     TipoEmpleadoEntity,
     PacienteEntity,
     ConsultorioEntity,
-    EspecialidadEntity
+    EspecialidadEntity,
+    EstadoTurnoEntity,
+    GrupoSanguineoEntity,
+    HistoriaClinicaEntity,
+    TurnoEntity
 ];
