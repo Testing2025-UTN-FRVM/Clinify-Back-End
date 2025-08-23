@@ -5,7 +5,7 @@ import {
     Entity,
     Index,
     JoinTable,
-    ManyToMany, OneToMany, OneToOne,
+    ManyToMany, OneToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
 import {RoleEntity} from "./role.entity";
