@@ -2,7 +2,7 @@ import {HttpException, Injectable, NotFoundException, UnauthorizedException} fro
 import {InjectRepository} from "@nestjs/typeorm";
 import {UserEntity} from "../../entities/user.entity";
 import {Repository} from "typeorm";
-import { hashSync, compareSync } from 'bcrypt';
+import { compareSync } from 'bcrypt';
 import {JwtService} from "../../jwt/jwt.service";
 import {UserI} from "../../interfaces/JWT/user.interface";
 import {LoginDTO} from "../../interfaces/login.dto";
