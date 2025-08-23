@@ -5,11 +5,12 @@ import {
     Entity,
     Index,
     JoinTable,
-    ManyToMany,
+    ManyToMany, OneToMany, OneToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
 import {RoleEntity} from "./role.entity";
 import { hashSync } from 'bcrypt';
+import {EmpleadoEntity} from "./empleado.entity";
 
 @Entity('users')
 export class UserEntity extends BaseEntity implements UserI {
@@ -24,6 +25,9 @@ export class UserEntity extends BaseEntity implements UserI {
     @ManyToMany(() => RoleEntity, role => role.users)
     @JoinTable()
     roles: RoleEntity[];
+
+    @OneToOne(() => EmpleadoEntity, (empleado) => empleado.user)
+    empleado: EmpleadoEntity;
 
     get permissionCodes(): string[] {
         return this.roles?.flatMap(role => role.permissions.map(permission => permission.code)) || [];
