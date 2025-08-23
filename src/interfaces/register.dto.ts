@@ -1,4 +1,4 @@
-import {IsDate, IsNotEmpty, IsString} from "class-validator";
+import {IsDate, IsNotEmpty, IsNumber, IsString} from "class-validator";
 
 export type TipoUsuario = 'user' | 'empleado' | 'paciente';
 
@@ -31,4 +31,8 @@ export class RegistrarEmpleadoDTO {
 
     @IsString()
     telefono: string; // e.g., '123-456-7890'
+
+    //Empleado
+    @IsNumber()
+    idTipoEmpleado: number;
 }
