@@ -27,17 +27,15 @@ export class UsersService {
         return true;
     }
 
-    // async register(body: RegisterDTO): Promise<{status: string}> {
-    //     try {
-    //         const user = new UserEntity();
-    //         Object.assign(user, body);
-    //         user.password = hashSync(user.password, 10);
-    //         await this.userRepository.save(user);
-    //         return {status: "created"};
-    //     }catch (error) {
-    //         throw new HttpException(error.message, 500);
-    //     }
-    // }
+    async register(email: string, password: string): Promise<UserEntity> {
+        try {
+            const user = this.userRepository.create({email, password});
+            await this.userRepository.save(user);
+            return user;
+        }catch (error) {
+            throw new HttpException(error.message, 500);
+        }
+    }
 
     async login(body: LoginDTO) {
         const user = await this.findByEmail(body.email);
