@@ -11,6 +11,8 @@ import { EmpleadoService } from './services/empleado/empleado.service';
 import { EmpleadoController } from './services/empleado/empleado.controller';
 import { TipoEmpleadoService } from './services/tipo-empleado/tipo-empleado.service';
 import { TipoEmpleadoController } from './services/tipo-empleado/tipo-empleado.controller';
+import { EspecialidadService } from './services/especialidad/especialidad.service';
+import { EspecialidadController } from './services/especialidad/especialidad.controller';
 
 
 
@@ -36,7 +38,7 @@ import { TipoEmpleadoController } from './services/tipo-empleado/tipo-empleado.c
     }),
     TypeOrmModule.forFeature(entities),
     ],
-    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController],
-    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService],
+    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController],
+    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService],
 })
 export class AppModule {}
