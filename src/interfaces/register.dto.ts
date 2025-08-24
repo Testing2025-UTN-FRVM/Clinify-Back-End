@@ -1,10 +1,34 @@
 import {IsDate, IsNotEmpty, IsNumber, IsString} from "class-validator";
 
-export type TipoUsuario = 'user' | 'empleado' | 'paciente';
+abstract class RegistrarPersonaDTO {
+    //Persona
+    @IsString()
+    @IsNotEmpty()
+    nombre: string;
 
-export class RegistrarEmpleadoDTO {
-    tipo: TipoUsuario;
+    @IsString()
+    @IsNotEmpty()
+    apellido: string;
 
+    @IsDate()
+    @IsNotEmpty()
+    fechaNacimiento: Date;
+
+    @IsString()
+    @IsNotEmpty()
+    tipoDocumento: string;
+
+    @IsString()
+    @IsNotEmpty()
+    nroDocumento: string;
+
+    @IsString()
+    @IsNotEmpty()
+    telefono: string;
+}
+
+export class RegistrarEmpleadoDTO extends RegistrarPersonaDTO {
+    //User
     @IsString()
     @IsNotEmpty()
     email: string;
@@ -13,26 +37,29 @@ export class RegistrarEmpleadoDTO {
     @IsNotEmpty()
     password: string;
 
-    //Persona
-    @IsString()
-    nombre: string;
-
-    @IsString()
-    apellido: string;
-
-    @IsDate()
-    fechaNacimiento: Date; // ISO date string
-
-    @IsString()
-    tipoDocumento: string; // e.g., 'DNI', 'Passport'
-
-    @IsString()
-    nroDocumento: string; // e.g., '12345678'
-
-    @IsString()
-    telefono: string; // e.g., '123-456-7890'
-
     //Empleado
     @IsNumber()
+    @IsNotEmpty()
     idTipoEmpleado: number;
+
+    //Doctor
+    @IsNumber()
+    idEspecialidad: number;
+}
+
+export class RegistrarPacienteDTO extends RegistrarPersonaDTO {
+    @IsNumber()
+    @IsNotEmpty()
+    altura: number;
+
+    @IsNumber()
+    @IsNotEmpty()
+    peso: number;
+
+    @IsString()
+    observaciones: string;
+
+    @IsNumber()
+    @IsNotEmpty()
+    idGrupoSanguineo: number;
 }
