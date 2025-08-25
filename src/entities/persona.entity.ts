@@ -1,5 +1,7 @@
 import {Entity, Column, Index, TableInheritance, BaseEntity, PrimaryGeneratedColumn} from "typeorm";
 
+@Index('UQ_users_doc', ['tipoDocumento', 'numeroDocumento'], { unique: true })
+
 @Entity('persona')
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class PersonaEntity extends BaseEntity {
@@ -19,7 +21,6 @@ export class PersonaEntity extends BaseEntity {
     tipoDocumento: string;
 
     @Column({nullable: false})
-    @Index({unique: true})
     numeroDocumento: string;
 
     @Column({nullable: true})

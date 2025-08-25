@@ -6,19 +6,22 @@ import {
     Index,
     JoinTable,
     ManyToMany, OneToOne,
-    PrimaryGeneratedColumn
+    PrimaryGeneratedColumn, Unique
 } from 'typeorm';
 import {RoleEntity} from "./role.entity";
 import { hashSync } from 'bcrypt';
 import {EmpleadoEntity} from "./empleado.entity";
 
+@Unique('UQ_users_email',['email'])
+
 @Entity('users')
 export class UserEntity extends BaseEntity implements UserI {
     @PrimaryGeneratedColumn()
     id: number;
-    @Index({unique:true})
+
     @Column()
     email: string;
+
     @Column()
     password: string;
 
@@ -36,7 +39,7 @@ export class UserEntity extends BaseEntity implements UserI {
     @BeforeInsert()
     @BeforeUpdate()
     async hashPassword() {
-        if (this.password) {
+        if (this.password && !this.password.startsWith('$2')) {
             this.password = await hashSync(this.password, 10);
         }
     }
