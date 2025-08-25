@@ -1,4 +1,6 @@
 import {IsDate, IsNotEmpty, IsNumber, IsString} from "class-validator";
+import {IsPersonaDocUnique} from "../common/validators/persona-doc-unique.validator";
+import {IsUniqueEmail} from "../common/validators/unique-email.validator";
 
 abstract class RegistrarPersonaDTO {
     //Persona
@@ -20,6 +22,7 @@ abstract class RegistrarPersonaDTO {
 
     @IsString()
     @IsNotEmpty()
+    @IsPersonaDocUnique('tipoDocumento', 'nroDocumento')
     nroDocumento: string;
 
     @IsString()
@@ -31,6 +34,7 @@ export class RegistrarEmpleadoDTO extends RegistrarPersonaDTO {
     //User
     @IsString()
     @IsNotEmpty()
+    @IsUniqueEmail()
     email: string;
 
     @IsString()
