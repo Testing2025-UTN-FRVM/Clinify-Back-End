@@ -20,11 +20,6 @@ export class UsersController {
         return this.service.login(body);
     }
 
-    // @Post('register')
-    // register(@Body() body: RegisterDTO) {
-    //     return this.service.register(body);
-    // }
-
     @Get('refresh-token')
     refreshToken(@Req() request: Request) {
         return this.service.refreshToken(
