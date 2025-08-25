@@ -13,6 +13,8 @@ import { TipoEmpleadoService } from './services/tipo-empleado/tipo-empleado.serv
 import { TipoEmpleadoController } from './services/tipo-empleado/tipo-empleado.controller';
 import { EspecialidadService } from './services/especialidad/especialidad.service';
 import { EspecialidadController } from './services/especialidad/especialidad.controller';
+import {IsUniqueEmailConstraint} from "./common/validators/unique-email.validator";
+import {IsPersonaDocUniqueConstraint} from "./common/validators/persona-doc-unique.validator";
 
 
 
@@ -39,6 +41,6 @@ import { EspecialidadController } from './services/especialidad/especialidad.con
     TypeOrmModule.forFeature(entities),
     ],
     controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController],
-    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService],
+    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint]
 })
 export class AppModule {}
