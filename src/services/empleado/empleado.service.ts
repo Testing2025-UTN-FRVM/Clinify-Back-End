@@ -63,6 +63,6 @@ export class EmpleadoService {
     }
 
     async findAll(): Promise<EmpleadoEntity[]> {
-        return this.empleadoRepository.find({relations: ["tipoEmpleado", "user"]});
+        return this.empleadoRepository.find({relations: ['user','tipoEmpleado','especialidad']});
     }
 }
