@@ -3,7 +3,6 @@ import {
     BaseEntity, BeforeInsert, BeforeUpdate,
     Column,
     Entity,
-    Index,
     JoinTable,
     ManyToMany, OneToOne,
     PrimaryGeneratedColumn, Unique
