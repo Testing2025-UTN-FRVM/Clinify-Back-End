@@ -14,7 +14,7 @@ export class EmpleadoEntity extends PersonaEntity {
     @JoinColumn({name:'tipo_empleado_id'})
     tipoEmpleado: TipoEmpleadoEntity;
 
-    @OneToOne(() => UserEntity, { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
+    @OneToOne(() => UserEntity, { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: UserEntity;
 
