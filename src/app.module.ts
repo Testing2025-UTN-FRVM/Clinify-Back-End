@@ -15,6 +15,10 @@ import { EspecialidadService } from './services/especialidad/especialidad.servic
 import { EspecialidadController } from './services/especialidad/especialidad.controller';
 import {IsUniqueEmailConstraint} from "./common/validators/unique-email.validator";
 import {IsPersonaDocUniqueConstraint} from "./common/validators/persona-doc-unique.validator";
+import { PacienteService } from './services/paciente/paciente.service';
+import { PacienteController } from './services/paciente/paciente.controller';
+import { GrupoSanguineoService } from './services/grupo-sanguineo/grupo-sanguineo.service';
+import { GrupoSanguineoController } from './services/grupo-sanguineo/grupo-sanguineo.controller';
 
 
 
@@ -40,7 +44,7 @@ import {IsPersonaDocUniqueConstraint} from "./common/validators/persona-doc-uniq
     }),
     TypeOrmModule.forFeature(entities),
     ],
-    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController],
-    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint]
+    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController],
+    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService]
 })
 export class AppModule {}
