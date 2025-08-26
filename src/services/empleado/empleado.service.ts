@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {EmpleadoEntity} from "../../entities/empleado.entity";
 import {Repository} from "typeorm";
@@ -62,7 +62,27 @@ export class EmpleadoService {
         }
     }
 
+    async delete(id: number): Promise<void> {
+        const emp = await this.findById(id);
+        await this.empleadoRepository.remove(emp);
+    }
+
+    async findById(id: number): Promise<EmpleadoEntity> {
+        const emp = await this.empleadoRepository.findOneBy({id});
+
+        if(!emp){
+            throw new NotFoundException("No existe el empleado con el id: "+id);
+        }
+
+        return emp;
+    }
+
     async findAll(): Promise<EmpleadoEntity[]> {
-        return this.empleadoRepository.find({relations: ['user','tipoEmpleado','especialidad']});
+        return this.empleadoRepository.createQueryBuilder('e')
+            .leftJoinAndSelect('e.user', 'u')
+            .leftJoinAndSelect('e.tipoEmpleado', 'te')
+            .leftJoinAndSelect('e.especialidad', 'es')
+            .select(['e.id','e.nombre','e.apellido','u.email','te.nombre','es.nombre']) // elegís columnas
+            .getMany();
     }
 }
