@@ -1,7 +1,7 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
-import {InjectRepository} from "@nestjs/typeorm";
+import {InjectDataSource, InjectRepository} from "@nestjs/typeorm";
 import {EmpleadoEntity} from "../../entities/empleado.entity";
-import {Repository} from "typeorm";
+import {DataSource, Repository} from "typeorm";
 import {RegistrarEmpleadoDTO} from "../../interfaces/register.dto";
 import {TipoEmpleadoService} from "../tipo-empleado/tipo-empleado.service";
 import {UsersService} from "../users/users.service";
@@ -19,36 +19,30 @@ export class EmpleadoService {
         @InjectRepository(EmpleadoEntity)
         private readonly empleadoRepository: Repository<EmpleadoEntity>,
 
+        @InjectDataSource()
+        private readonly dataSource: DataSource
+
 
     ) {}
 
     async create(dto: RegistrarEmpleadoDTO): Promise<EmpleadoEntity> {
         try {
-            const tipo = await this.tipoEmpleadoService.findOne(dto.idTipoEmpleado);
+            return await this.dataSource.transaction(async manager => {
+                const tipoEmpleado = await this.tipoEmpleadoService.findOne(dto.idTipoEmpleado);
+                const especialidad = dto.idEspecialidad ? await this.especialidadService.findOne(dto.idEspecialidad) : null;
+                const persona = await this.personaService.create(dto, manager);
+                const user = await this.userService.register(dto.email, dto.password, manager);
 
-            //const user = await this.userService.register(dto.email, dto.password);
 
-            //const persona = await this.personaService.create(dto);
-
-            if(tipo.nombre =="Doctor") {
-
-                const especialidad = await this.especialidadService.findOne(dto.idEspecialidad);
-
-                const empleado = this.empleadoRepository.create({
-                    persona: await this.personaService.create(dto),
-                    user: await this.userService.register(dto.email, dto.password),
-                    tipoEmpleado: tipo,
-                    especialidad: especialidad,
+                const newEmpleado = this.empleadoRepository.create({
+                    tipoEmpleado,
+                    ...(especialidad ? { especialidad } : {}),
+                    persona,
+                    user
                 });
-                return this.empleadoRepository.save(empleado);
-            } else {
-                const empleado = this.empleadoRepository.create({
-                    persona: await this.personaService.create(dto),
-                    user: await this.personaService.create(dto),
-                    tipoEmpleado: tipo
-                });
-                return this.empleadoRepository.save(empleado);
-            }
+
+                return manager.getRepository(EmpleadoEntity).save(newEmpleado);
+            })
 
 
         } catch (error) {

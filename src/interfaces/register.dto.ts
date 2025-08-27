@@ -1,4 +1,4 @@
-import {IsDate, IsNotEmpty, IsNumber, IsString} from "class-validator";
+import {IsDate, IsNotEmpty, IsNumber, IsOptional, IsString} from "class-validator";
 import {IsPersonaDocUnique} from "../common/validators/persona-doc-unique.validator";
 import {IsUniqueEmail} from "../common/validators/unique-email.validator";
 
@@ -48,6 +48,7 @@ export class RegistrarEmpleadoDTO extends RegistrarPersonaDTO {
 
     //Doctor
     @IsNumber()
+    @IsOptional()
     idEspecialidad: number;
 }
 
