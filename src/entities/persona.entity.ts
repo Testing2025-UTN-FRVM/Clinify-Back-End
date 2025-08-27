@@ -1,9 +1,17 @@
-import {Entity, Column, Index, TableInheritance, BaseEntity, PrimaryGeneratedColumn} from "typeorm";
+import {
+    Entity,
+    Column,
+    Index,
+    BaseEntity,
+    PrimaryGeneratedColumn,
+    OneToOne
+} from "typeorm";
+import {EmpleadoEntity} from "./empleado.entity";
+import {PacienteEntity} from "./paciente.entity";
 
 @Index('UQ_users_doc', ['tipoDocumento', 'numeroDocumento'], { unique: true })
 
 @Entity('persona')
-@TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class PersonaEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
@@ -25,4 +33,10 @@ export class PersonaEntity extends BaseEntity {
 
     @Column({nullable: true})
     telefono: string;
+
+    @OneToOne(() => EmpleadoEntity, (empleado) => empleado.persona)
+    empleado: EmpleadoEntity;
+
+    @OneToOne(()=> PacienteEntity, (paciente) => paciente.persona)
+    paciente: PacienteEntity;
 }
