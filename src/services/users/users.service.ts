@@ -1,7 +1,7 @@
 import {HttpException, Injectable, NotFoundException, UnauthorizedException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {UserEntity} from "../../entities/user.entity";
-import {Repository} from "typeorm";
+import {Repository, EntityManager} from "typeorm";
 import { compareSync } from 'bcrypt';
 import {JwtService} from "../../jwt/jwt.service";
 import {UserI} from "../../interfaces/JWT/user.interface";
@@ -27,10 +27,11 @@ export class UsersService {
         return true;
     }
 
-    async register(email: string, password: string): Promise<UserEntity> {
+    async register(email: string, password: string, manager?:EntityManager): Promise<UserEntity> {
         try {
-            const user = this.userRepository.create({email, password});
-            await this.userRepository.save(user);
+            const repo=manager? manager.getRepository(UserEntity): this.userRepository
+            const user =repo.create({email, password});
+            await repo.save(user);
             return user;
         }catch (error) {
             throw new HttpException(error.message, 500);
