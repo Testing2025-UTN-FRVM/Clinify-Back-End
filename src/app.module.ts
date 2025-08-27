@@ -19,6 +19,7 @@ import { PacienteService } from './services/paciente/paciente.service';
 import { PacienteController } from './services/paciente/paciente.controller';
 import { GrupoSanguineoService } from './services/grupo-sanguineo/grupo-sanguineo.service';
 import { GrupoSanguineoController } from './services/grupo-sanguineo/grupo-sanguineo.controller';
+import { PersonaService } from './services/persona/persona.service';
 
 
 
@@ -45,6 +46,6 @@ import { GrupoSanguineoController } from './services/grupo-sanguineo/grupo-sangu
     TypeOrmModule.forFeature(entities),
     ],
     controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController],
-    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService]
+    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService]
 })
 export class AppModule {}
