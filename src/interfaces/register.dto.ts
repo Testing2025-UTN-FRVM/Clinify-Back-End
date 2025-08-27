@@ -2,7 +2,7 @@ import {IsDate, IsNotEmpty, IsNumber, IsString} from "class-validator";
 import {IsPersonaDocUnique} from "../common/validators/persona-doc-unique.validator";
 import {IsUniqueEmail} from "../common/validators/unique-email.validator";
 
-abstract class RegistrarPersonaDTO {
+export class RegistrarPersonaDTO {
     //Persona
     @IsString()
     @IsNotEmpty()
