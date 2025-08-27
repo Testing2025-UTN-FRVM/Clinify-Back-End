@@ -66,11 +66,6 @@ export class EmpleadoService {
     }
 
     async findAll(): Promise<EmpleadoEntity[]> {
-        return this.empleadoRepository.createQueryBuilder('e')
-            .leftJoinAndSelect('e.user', 'u')
-            .leftJoinAndSelect('e.tipoEmpleado', 'te')
-            .leftJoinAndSelect('e.especialidad', 'es')
-            .select(['e.id','e.nombre','e.apellido','u.email','te.nombre','es.nombre']) // elegís columnas
-            .getMany();
+        return this.empleadoRepository.find({relations: ['tipoEmpleado','especialidad','persona','user']});
     }
 }
