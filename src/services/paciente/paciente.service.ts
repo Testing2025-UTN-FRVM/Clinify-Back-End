@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import {InjectRepository} from "@nestjs/typeorm";
+import {InjectDataSource, InjectRepository} from "@nestjs/typeorm";
 import {PacienteEntity} from "../../entities/paciente.entity";
-import {Repository} from "typeorm";
+import {DataSource, Repository} from "typeorm";
 import {RegistrarPacienteDTO} from "../../interfaces/register.dto";
 import {GrupoSanguineoService} from "../grupo-sanguineo/grupo-sanguineo.service";
 import {PersonaService} from "../persona/persona.service";
@@ -14,23 +14,28 @@ export class PacienteService {
 
         @InjectRepository(PacienteEntity)
         private readonly pacienteRepository: Repository<PacienteEntity>,
+
+        @InjectDataSource()
+        private readonly dataSource: DataSource
     ) {}
 
     async create(dto: RegistrarPacienteDTO): Promise<PacienteEntity> {
         try{
-            const grupoSanguineo = await this.grupoSanguineoService.findById(dto.idGrupoSanguineo);
+            return await this.dataSource.transaction(async manager => {
+                const grupoSanguineo = await this.grupoSanguineoService.findById(dto.idGrupoSanguineo);
 
-            const persona = await this.personaService.create(dto);
+                const persona = await this.personaService.create(dto,manager);
 
-            const paciente = this.pacienteRepository.create({
-                altura: dto.altura,
-                peso: dto.peso,
-                observaciones: dto.observaciones,
-                persona: persona,
-                grupoSanguineo: grupoSanguineo
-            });
+                const paciente = this.pacienteRepository.create({
+                    altura: dto.altura,
+                    peso: dto.peso,
+                    observaciones: dto.observaciones,
+                    persona: persona,
+                    grupoSanguineo: grupoSanguineo
+                });
 
-            return this.pacienteRepository.save(paciente);
+                return manager.getRepository(PacienteEntity).save(paciente);
+            })
 
         }catch (error) {
             throw new Error(error.message,error.stack);
