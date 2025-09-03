@@ -13,7 +13,7 @@ export class ProcedimientoEntity {
     @Column()
     descripcion: string;
 
-    @Column({default: 30})
+    @Column({type: 'integer',default: 30})
     duracion: number;
 
     @OneToMany(()=> TurnoEntity,(turno) => turno.procedimiento)
