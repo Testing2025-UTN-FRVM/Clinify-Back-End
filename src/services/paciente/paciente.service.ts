@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectDataSource, InjectRepository} from "@nestjs/typeorm";
 import {PacienteEntity} from "../../entities/paciente.entity";
 import {DataSource, Repository} from "typeorm";
@@ -40,6 +40,14 @@ export class PacienteService {
         }catch (error) {
             throw new Error(error.message,error.stack);
         }
+    }
+
+    async findOne(id: number): Promise<PacienteEntity> {
+        const paciente = await this.pacienteRepository.findOne({where: {id}, relations: ['grupoSanguineo','persona']});
+        if (!paciente) {
+            throw new NotFoundException(`El id: ${id} no corresponde a ningun paciente`);
+        }
+        return paciente;
     }
 
     async findAll(): Promise<PacienteEntity[]> {
