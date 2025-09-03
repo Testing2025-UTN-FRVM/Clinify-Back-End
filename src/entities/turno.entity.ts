@@ -10,10 +10,10 @@ export class TurnoEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({type: 'timestamptz', default: () => 'now()'})
     fechaRegistro: Date;
 
-    @Column()
+    @Column({type: 'timestamptz'})
     fechaHoraTurno: Date;
 
     @Column()

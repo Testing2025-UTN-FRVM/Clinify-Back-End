@@ -68,4 +68,12 @@ export class EmpleadoService {
     async findAll(): Promise<EmpleadoEntity[]> {
         return this.empleadoRepository.find({relations: ['tipoEmpleado','especialidad','persona','user']});
     }
+
+    async findOne(id: number): Promise<EmpleadoEntity> {
+        const empleado = await this.empleadoRepository.findOne({where: {id}, relations: ['tipoEmpleado','especialidad','persona','user']});
+        if (!empleado) {
+            throw new NotFoundException(`El id: ${id} no corresponde a ningun empleado`);
+        }
+        return empleado;
+    }
 }

@@ -2,6 +2,8 @@ import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {EspecialidadEntity} from "../../entities/especialidad.entity";
 import {Repository} from "typeorm";
+import {CreateEspecialidadDto} from "../../interfaces/create/create-especialidad.dto";
+import {PatchEspecialidad} from "../../interfaces/patch/patch-especialidad.dto";
 
 @Injectable()
 export class EspecialidadService {
@@ -9,6 +11,23 @@ export class EspecialidadService {
         @InjectRepository(EspecialidadEntity)
         private readonly especialidadRepository: Repository<EspecialidadEntity>,
     ) {}
+
+    async create(dto: CreateEspecialidadDto): Promise<EspecialidadEntity> {
+        const especialidad = this.especialidadRepository.create(dto);
+        return await this.especialidadRepository.save(especialidad);
+    }
+
+    async edit(id: number, dto: PatchEspecialidad): Promise<EspecialidadEntity> {
+        const especialidad = await this.findOne(id);
+        this.especialidadRepository.merge(especialidad, dto);
+        return await this.especialidadRepository.save(especialidad);
+    }
+
+    async delete(id: number): Promise<{ message: string }> {
+        const especialidad = await this.findOne(id);
+        await this.especialidadRepository.remove(especialidad);
+        return { message: `La especialidad: ${especialidad.nombre} fue eliminada correctamente` };
+    }
 
     async findOne(id: number): Promise<EspecialidadEntity> {
         const especialidad = await this.especialidadRepository.findOneBy({id});
@@ -19,7 +38,6 @@ export class EspecialidadService {
     }
 
     async findAll(): Promise<EspecialidadEntity[]> {
-        const especialidades = await this.especialidadRepository.find();
-        return especialidades;
+        return await this.especialidadRepository.find();
     }
 }
