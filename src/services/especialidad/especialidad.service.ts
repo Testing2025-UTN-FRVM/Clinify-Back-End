@@ -17,4 +17,9 @@ export class EspecialidadService {
         }
         return especialidad;
     }
+
+    async findAll(): Promise<EspecialidadEntity[]> {
+        const especialidades = await this.especialidadRepository.find();
+        return especialidades;
+    }
 }
