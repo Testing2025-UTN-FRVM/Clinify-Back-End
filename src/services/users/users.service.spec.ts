@@ -1,6 +1,7 @@
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserEntity } from '../../entities/user.entity';
+jest.mock('bcrypt');
 import * as bcrypt from 'bcrypt';
 
 describe('UsersService', () => {
@@ -62,7 +63,7 @@ describe('UsersService', () => {
     const user = { email: body.email, password: 'hashed' } as UserEntity;
     repo.findOne.mockResolvedValue(user);
 
-    jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
+    (bcrypt.compareSync as jest.Mock).mockReturnValue(true);
     jwtService.generateToken.mockImplementation((payload: any, type: string) => `${type}-token`);
 
     const tokens = await service.login(body as any);
@@ -84,7 +85,7 @@ describe('UsersService', () => {
     const user = { email: body.email, password: 'hashed' } as UserEntity;
     repo.findOne.mockResolvedValue(user);
 
-    jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
+    (bcrypt.compareSync as jest.Mock).mockReturnValue(false);
 
     await expect(service.login(body as any)).rejects.toBeInstanceOf(UnauthorizedException);
   });
