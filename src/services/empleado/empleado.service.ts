@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectDataSource, InjectRepository} from "@nestjs/typeorm";
 import {EmpleadoEntity} from "../../entities/empleado.entity";
 import {DataSource, Repository} from "typeorm";
@@ -76,4 +76,19 @@ export class EmpleadoService {
         }
         return empleado;
     }
+
+    async findAllDoctors(): Promise<EmpleadoEntity[]> {
+        return this.empleadoRepository.find({where: {tipoEmpleado: {nombre: 'Doctor'}}, relations: ['tipoEmpleado','especialidad','persona']});
+    }
+
+    async assignEspecialidad(id: number, idEspecialidad: number): Promise<EmpleadoEntity> {
+        const empleado = await this.findOne(id);
+
+        if (empleado.tipoEmpleado.nombre !== 'Doctor') { throw new BadRequestException('El empleado ingresado no es un doctor'); }
+
+        empleado.especialidad = await this.especialidadService.findOne(idEspecialidad);
+        return this.empleadoRepository.save(empleado);
+    }
+
+   // async assignConsultorio()
 }
