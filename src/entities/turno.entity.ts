@@ -3,6 +3,7 @@ import {EmpleadoEntity} from "./empleado.entity";
 import {PacienteEntity} from "./paciente.entity";
 import {EspecialidadEntity} from "./especialidad.entity";
 import {EstadoTurnoEntity} from "./estadoTurno.entity";
+import {ProcedimientoEntity} from "./procedimiento.entity";
 
 @Entity('turno')
 export class TurnoEntity {
@@ -17,6 +18,10 @@ export class TurnoEntity {
 
     @Column()
     motivo: string;
+
+    @ManyToOne(()=> ProcedimientoEntity,(procedimiento) => procedimiento.turnos)
+    @JoinColumn({name: 'procedimiento'})
+    procedimiento: ProcedimientoEntity;
 
     @ManyToOne(()=> EstadoTurnoEntity, (estado) => estado.turnos)
     @JoinColumn({name: 'estado'})

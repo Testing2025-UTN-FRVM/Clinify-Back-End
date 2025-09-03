@@ -1,4 +1,13 @@
-import {BaseEntity, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {
+    BaseEntity,
+    Entity,
+    JoinColumn, JoinTable,
+    ManyToMany,
+    ManyToOne,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn
+} from "typeorm";
 import {TipoEmpleadoEntity} from "./tipoEmpleado.entity";
 import {UserEntity} from "./user.entity";
 import {EspecialidadEntity} from "./especialidad.entity";
@@ -6,6 +15,7 @@ import {ConsultorioEntity} from "./consultorio.entity";
 import {HistoriaClinicaEntity} from "./historiaClinica.entity";
 import {TurnoEntity} from "./turno.entity";
 import {PersonaEntity} from "./persona.entity";
+import {ProcedimientoEntity} from "./procedimiento.entity";
 
 @Entity('empleado')
 export class EmpleadoEntity extends BaseEntity {
@@ -27,6 +37,10 @@ export class EmpleadoEntity extends BaseEntity {
     @ManyToOne(()=> EspecialidadEntity, (especialidad) => especialidad.empleados)
     @JoinColumn({name: 'especialidad_id'})
     especialidad: EspecialidadEntity;
+
+    @ManyToMany(()=> ProcedimientoEntity, (procedimiento) => procedimiento.doctores)
+    @JoinTable()
+    procedimientos: ProcedimientoEntity[];
 
     @ManyToOne(()=> ConsultorioEntity, (consultorio) => consultorio.empleados)
     @JoinColumn({name: 'consultorio_id'})

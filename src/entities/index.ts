@@ -11,6 +11,7 @@ import {EstadoTurnoEntity} from "./estadoTurno.entity";
 import {GrupoSanguineoEntity} from "./grupoSanguineo.entity";
 import {HistoriaClinicaEntity} from "./historiaClinica.entity";
 import {TurnoEntity} from "./turno.entity";
+import {ProcedimientoEntity} from "./procedimiento.entity";
 
 export const entities = [
     PermissionEntity,
@@ -25,5 +26,6 @@ export const entities = [
     EstadoTurnoEntity,
     GrupoSanguineoEntity,
     HistoriaClinicaEntity,
-    TurnoEntity
+    TurnoEntity,
+    ProcedimientoEntity
 ];
