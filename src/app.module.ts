@@ -22,6 +22,12 @@ import { GrupoSanguineoController } from './services/grupo-sanguineo/grupo-sangu
 import { PersonaService } from './services/persona/persona.service';
 import { TurnoService } from './services/turno/turno.service';
 import { TurnoController } from './services/turno/turno.controller';
+import { ConsultorioController } from './services/consultorio/consultorio.controller';
+import { ConsultorioService } from './services/consultorio/consultorio.service';
+import { ProcedimientoService } from './services/procedimiento/procedimiento.service';
+import { ProcedimientoController } from './services/procedimiento/procedimiento.controller';
+import { EstadoTurnoController } from './services/estado-turno/estado-turno.controller';
+import { EstadoTurnoService } from './services/estado-turno/estado-turno.service';
 
 
 
@@ -47,7 +53,7 @@ import { TurnoController } from './services/turno/turno.controller';
     }),
     TypeOrmModule.forFeature(entities),
     ],
-    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController],
-    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService]
+    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController, ConsultorioController, ProcedimientoController, EstadoTurnoController],
+    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService, ConsultorioService, ProcedimientoService, EstadoTurnoService]
 })
 export class AppModule {}
