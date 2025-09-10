@@ -24,6 +24,10 @@ import { TurnoService } from './services/turno/turno.service';
 import { TurnoController } from './services/turno/turno.controller';
 import {ProcedimientoService} from "./services/procedimiento/procedimiento.service";
 import {EstadoTurnoService} from "./services/estado-turno/estado-turno.service";
+import { PermissionsService } from 'src/services/permissions/permissions.service';
+import { PermissionsController } from 'src/services/permissions/permissions.controller';
+import { RolesController } from 'src/services/roles/roles.controller';
+import { RolesService } from 'src/services/roles/roles.service';
 
 
 
@@ -49,7 +53,7 @@ import {EstadoTurnoService} from "./services/estado-turno/estado-turno.service";
     }),
     TypeOrmModule.forFeature(entities),
     ],
-    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController],
-    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService, ProcedimientoService, EstadoTurnoService]
+    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController, PermissionsController, RolesController],
+    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService, ProcedimientoService, EstadoTurnoService, PermissionsService, RolesService]
 })
 export class AppModule {}
