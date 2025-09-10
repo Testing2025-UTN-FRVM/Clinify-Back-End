@@ -2,9 +2,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProcedimientoController } from './procedimiento.controller';
 import { ProcedimientoService } from './procedimiento.service';
-import { CreateProcedimientoDTO } from '../../interfaces/create/create-procedimiento.dto';
-import { PatchProcedimientoDTO } from '../../interfaces/patch/patch-procedimiento.dto';
-import { ProcedimientoEntity } from '../../entities/procedimiento.entity';
+import { CreateProcedimientoDTO } from 'src/interfaces/create/create-procedimiento.dto';
+import { PatchProcedimientoDTO } from 'src/interfaces/patch/patch-procedimiento.dto';
+import { ProcedimientoEntity } from 'src/entities/procedimiento.entity';
 
 describe('ProcedimientoController', () => {
   let controller: ProcedimientoController;
