@@ -22,6 +22,8 @@ import { GrupoSanguineoController } from './services/grupo-sanguineo/grupo-sangu
 import { PersonaService } from './services/persona/persona.service';
 import { TurnoService } from './services/turno/turno.service';
 import { TurnoController } from './services/turno/turno.controller';
+import {ProcedimientoService} from "./services/procedimiento/procedimiento.service";
+import {EstadoTurnoService} from "./services/estado-turno/estado-turno.service";
 
 
 
@@ -48,7 +50,7 @@ import { TurnoController } from './services/turno/turno.controller';
     TypeOrmModule.forFeature(entities),
     ],
     controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController],
-    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService]
+    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService, ProcedimientoService, EstadoTurnoService]
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer) {
