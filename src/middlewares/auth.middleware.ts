@@ -3,6 +3,7 @@ import {
     ExecutionContext, ForbiddenException,
     Injectable,
     UnauthorizedException,
+    NestMiddleware,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RequestWithUser } from 'src/interfaces/JWT/request-user';
@@ -11,6 +12,17 @@ import { UsersService } from 'src/services/users/users.service';
 import { Permissions } from './decorators/permissions.decorator';
 
 @Injectable()
+export class AuthMiddleware implements NestMiddleware {
+  constructor(private readonly usersService: UsersService) {}
+
+  async use(req: any, res: any, next: () => void) {
+    // Puedes usar this.usersService aquÃ­
+    // Por ejemplo:
+    // const user = await this.usersService.findByEmail(req.body.email);
+    next();
+  }
+}
+
 export class AuthGuard implements CanActivate {
     constructor(
         private jwtService: JwtService,
