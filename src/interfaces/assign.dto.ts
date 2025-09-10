@@ -6,3 +6,10 @@ export class AssignPermissionsDTO {
     @IsArray()
     permissionCodes: number[];
 }
+
+export class AssignRoleDTO {
+    @IsNotEmpty()
+    @IsNumber({},{ each: true})
+    @IsArray()
+    roleIds: number[];
+}
