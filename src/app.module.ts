@@ -1,10 +1,10 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import {entities} from "./entities";
 import {UsersController} from "./services/users/users.controller";
-import {AuthGuard, AuthMiddleware} from "./middlewares/auth.middleware";
+import {AuthGuard} from "./middlewares/auth.middleware";
 import {JwtService} from "./jwt/jwt.service";
 import {UsersService} from "./services/users/users.service";
 import { EmpleadoService } from './services/empleado/empleado.service';
@@ -52,10 +52,4 @@ import {EstadoTurnoService} from "./services/estado-turno/estado-turno.service";
     controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController],
     providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService, ProcedimientoService, EstadoTurnoService]
 })
-export class AppModule {
-    configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes({ path: 'users/*', method: RequestMethod.ALL });
-  }
-}
+export class AppModule {}
