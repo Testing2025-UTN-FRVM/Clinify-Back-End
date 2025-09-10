@@ -14,7 +14,7 @@ import { ProcedimientoEntity } from '../../entities/procedimiento.entity';
 import { EmpleadoEntity } from '../../entities/empleado.entity';
 import { PacienteEntity } from '../../entities/paciente.entity';
 import { EspecialidadEntity } from '../../entities/especialidad.entity';
-import { EstadoTurnoEntity } from '../../entities/estado-turno.entity';
+import { EstadoTurnoEntity } from '../../entities/estadoTurno.entity';
 
 // Mock de todas las dependencias del TurnoService
 const mockTurnoRepository = {
@@ -118,6 +118,7 @@ describe('TurnoService', () => {
         doctor: 1,
         paciente: 1,
         especialidad: 1,
+        estado: 1,
       };
 
       const mockProcedimiento: ProcedimientoEntity = {
@@ -126,10 +127,31 @@ describe('TurnoService', () => {
         duracion: 30, // 30 minutos
       } as ProcedimientoEntity;
 
-      const mockEstado: EstadoTurnoEntity = { id: 1, estado: 'Pendiente' } as EstadoTurnoEntity;
-      const mockDoctor: EmpleadoEntity = { id: 1, nombre: 'Dr. Smith' } as EmpleadoEntity;
-      const mockPaciente: PacienteEntity = { id: 1, nombre: 'John Doe' } as PacienteEntity;
-      const mockEspecialidad: EspecialidadEntity = { id: 1, nombre: 'Odontología' } as EspecialidadEntity;
+  const mockEstado: EstadoTurnoEntity = { id: 1, nombre: 'Pendiente', descripcion: '' } as EstadoTurnoEntity;
+  const mockDoctor: EmpleadoEntity = ({
+    id: 1,
+    nombre: 'Dr. Smith',
+    tipoEmpleado: null,
+    persona: null,
+    user: null,
+    especialidad: null,
+    procedimientos: [],
+    consultorio: null,
+    historiasClinicas: [],
+    turnos: [],
+  } as unknown) as EmpleadoEntity;
+  const mockPaciente: PacienteEntity = ({
+    id: 1,
+    nombre: 'John Doe',
+    altura: 0,
+    peso: 0,
+    observaciones: '',
+    persona: null,
+    grupoSanguineo: null,
+    historiasClinicas: [],
+    turnos: [],
+  } as unknown) as PacienteEntity;
+  const mockEspecialidad: EspecialidadEntity = { id: 1, nombre: 'Odontología' } as EspecialidadEntity;
 
       const mockNuevoTurno: TurnoEntity = {
         fechaRegistro: new Date(),
@@ -178,6 +200,7 @@ describe('TurnoService', () => {
         doctor: 1,
         paciente: 1,
         especialidad: 1,
+        estado: 1,
       };
 
       // Act & Assert
@@ -194,6 +217,7 @@ describe('TurnoService', () => {
         doctor: 1,
         paciente: 1,
         especialidad: 1,
+        estado: 1,
       };
       
       const mockProcedimiento: ProcedimientoEntity = {
