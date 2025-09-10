@@ -18,7 +18,7 @@ export class PermissionsController {
 
     @UseGuards(AuthGuard)
     @Permissions(['PERMISSIONS_EDIT'])
-    @Patch(':id')
+    @Patch('edit/:id')
     update(@Param('id') id: number, @Body() dto: CreatePermissionDTO): Promise<PermissionEntity> {
         return this.permissionsService.update(id, dto);
     }
