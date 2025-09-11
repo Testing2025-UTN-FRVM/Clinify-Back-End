@@ -1,10 +1,12 @@
-import {Injectable} from '@nestjs/common';
+import {ConflictException, Injectable} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {HistoriaClinicaEntity} from "src/entities/historiaClinica.entity";
 import {Repository} from "typeorm";
 import {PacienteService} from "src/services/paciente/paciente.service";
 import {EmpleadoService} from "src/services/empleado/empleado.service";
 import {CreateHistoriaClinicaDTO} from "src/interfaces/create/create-historiaClinica.dto";
+import {UserEntity} from "src/entities/user.entity";
+import {PatchHistoriaClinicaDTO} from "src/interfaces/patch/patch-historiaClinica.dto";
 
 @Injectable()
 export class HistoriaClinicaService {
@@ -16,9 +18,9 @@ export class HistoriaClinicaService {
         private readonly empleadoService: EmpleadoService,
     ) {}
 
-    async create(dto: CreateHistoriaClinicaDTO): Promise<HistoriaClinicaEntity> {
+    async create(dto: CreateHistoriaClinicaDTO, user: UserEntity): Promise<HistoriaClinicaEntity> {
         const paciente = await this.pacienteService.findOne(dto.paciente)
-        const doctor = await this.empleadoService.findOne(dto.doctor)
+        const doctor = await this.empleadoService.findByUser(user)
 
         const historia = this.historiaClinicaRepository.create({
             fechaEntrada: new Date(),
@@ -29,6 +31,22 @@ export class HistoriaClinicaService {
         })
 
         return this.historiaClinicaRepository.save(historia)
+    }
+
+    async edit(id: number, dto: PatchHistoriaClinicaDTO, user:UserEntity): Promise<HistoriaClinicaEntity> {
+        const historia = await this.findOne(id);
+
+        if(user !== historia.doctor.user){
+            throw new ConflictException("No tienes permisos para editar esta historia clinica");
+        }
+
+        if(Math.abs(new Date().getTime() - historia.fechaEntrada.getTime()) > 15 * 60 * 1000) {
+            throw new ConflictException("No puedes editar una historia clinica que ya ha pasado 15 minutos");
+        }
+
+        this.historiaClinicaRepository.merge(historia, dto);
+        return this.historiaClinicaRepository.save(historia);
+
     }
 
     async findByPatient(patient: number): Promise<HistoriaClinicaEntity[]> {
