@@ -1,6 +1,5 @@
 import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {EmpleadoEntity} from "./empleado.entity";
-import {HistoriaClinicaEntity} from "./historiaClinica.entity";
 import {TurnoEntity} from "./turno.entity";
 
 @Entity('especialidad')
