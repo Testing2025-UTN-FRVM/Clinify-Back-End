@@ -18,6 +18,12 @@ export class UsersController {
         return {email: req.user?.email}
     }
 
+    @UseGuards(AuthGuard)
+    @Get('my-user')
+    myUser(@Req() req: requestUser.RequestWithUser) {
+        return req.user
+    }
+
     @Post('login')
     login(@Body() body: LoginDTO) {
         return this.service.login(body);
