@@ -17,9 +17,6 @@ export class EspecialidadEntity extends BaseEntity {
     @OneToMany(()=> EmpleadoEntity, (emp) => emp.especialidad)
     empleados: EmpleadoEntity[];
 
-    @OneToMany(()=> HistoriaClinicaEntity, (historiaClinica) => historiaClinica.especialidad)
-    historiasClinicas: HistoriaClinicaEntity[];
-
     @OneToMany(()=> TurnoEntity, (turno) => turno.especialidad)
     turnos: TurnoEntity[];
 }

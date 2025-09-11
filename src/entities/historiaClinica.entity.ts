@@ -21,10 +21,6 @@ export class HistoriaClinicaEntity {
     @JoinColumn({name: 'paciente'})
     paciente: PacienteEntity;
 
-    @ManyToOne(()=> EspecialidadEntity, (especialidad)=> especialidad.historiasClinicas )
-    @JoinColumn({name: 'especialidad'})
-    especialidad: EspecialidadEntity;
-
     @ManyToOne(()=> EmpleadoEntity, (doctor)=> doctor.historiasClinicas )
     @JoinColumn({name: 'doctor'})
     doctor: EmpleadoEntity;
