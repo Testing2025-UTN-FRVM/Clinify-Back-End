@@ -1,12 +1,13 @@
 import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectDataSource, InjectRepository} from "@nestjs/typeorm";
-import {EmpleadoEntity} from "../../entities/empleado.entity";
+import {EmpleadoEntity} from "src/entities/empleado.entity";
 import {DataSource, Repository} from "typeorm";
-import {RegistrarEmpleadoDTO} from "../../interfaces/register.dto";
+import {RegistrarEmpleadoDTO} from "src/interfaces/register.dto";
 import {TipoEmpleadoService} from "../tipo-empleado/tipo-empleado.service";
 import {UsersService} from "../users/users.service";
 import {EspecialidadService} from "../especialidad/especialidad.service";
 import {PersonaService} from "../persona/persona.service";
+import {UserEntity} from "src/entities/user.entity";
 
 @Injectable()
 export class EmpleadoService {
@@ -73,6 +74,14 @@ export class EmpleadoService {
         const empleado = await this.empleadoRepository.findOne({where: {id}, relations: ['tipoEmpleado','especialidad','persona','user']});
         if (!empleado) {
             throw new NotFoundException(`El id: ${id} no corresponde a ningun empleado`);
+        }
+        return empleado;
+    }
+
+    async findByUser(user: UserEntity): Promise<EmpleadoEntity> {
+        const empleado = await this.empleadoRepository.findOne({where: {user}, relations: ['tipoEmpleado','especialidad','persona']});
+        if (!empleado) {
+            throw new NotFoundException(`El usuario: ${user.email} no corresponde a ningun empleado`);
         }
         return empleado;
     }
