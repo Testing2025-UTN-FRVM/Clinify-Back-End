@@ -8,6 +8,7 @@ import {UsersService} from "../users/users.service";
 import {EspecialidadService} from "../especialidad/especialidad.service";
 import {PersonaService} from "../persona/persona.service";
 import {UserEntity} from "src/entities/user.entity";
+import {ConsultorioService} from "src/services/consultorio/consultorio.service";
 
 @Injectable()
 export class EmpleadoService {
@@ -16,6 +17,7 @@ export class EmpleadoService {
         private readonly userService: UsersService,
         private readonly especialidadService: EspecialidadService,
         private readonly personaService: PersonaService,
+        private readonly consultorioService: ConsultorioService,
 
         @InjectRepository(EmpleadoEntity)
         private readonly empleadoRepository: Repository<EmpleadoEntity>,
@@ -31,6 +33,8 @@ export class EmpleadoService {
             return await this.dataSource.transaction(async manager => {
                 const tipoEmpleado = await this.tipoEmpleadoService.findOne(dto.idTipoEmpleado);
                 const especialidad = dto.idEspecialidad ? await this.especialidadService.findOne(dto.idEspecialidad) : null;
+                const consultorio = dto.idConsultorio ? await this.consultorioService.findOne(dto.idConsultorio) : null;
+
                 const persona = await this.personaService.create(dto, manager);
                 const user = await this.userService.register(dto.email, dto.password, manager);
 
@@ -38,6 +42,7 @@ export class EmpleadoService {
                 const newEmpleado = this.empleadoRepository.create({
                     tipoEmpleado,
                     ...(especialidad ? { especialidad } : {}),
+                    ...(consultorio ? { consultorio } : {}),
                     persona,
                     user
                 });
@@ -49,11 +54,6 @@ export class EmpleadoService {
         } catch (error) {
             throw new Error(error.message,error.stack);
         }
-    }
-
-    async delete(id: number): Promise<void> {
-        const emp = await this.findById(id);
-        await this.empleadoRepository.remove(emp);
     }
 
     async findById(id: number): Promise<EmpleadoEntity> {
@@ -90,6 +90,12 @@ export class EmpleadoService {
         return this.empleadoRepository.find({where: {tipoEmpleado: {nombre: 'Doctor'}}, relations: ['tipoEmpleado','especialidad','persona']});
     }
 
+    async changeTipoEmpleado(id: number, idTipoEmpleado: number): Promise<EmpleadoEntity> {
+        const empleado = await this.findOne(id);
+        empleado.tipoEmpleado = await this.tipoEmpleadoService.findOne(idTipoEmpleado);
+        return this.empleadoRepository.save(empleado);
+    }
+
     async assignEspecialidad(id: number, idEspecialidad: number): Promise<EmpleadoEntity> {
         const empleado = await this.findOne(id);
 
@@ -99,5 +105,13 @@ export class EmpleadoService {
         return this.empleadoRepository.save(empleado);
     }
 
-   // async assignConsultorio()
+    async assignConsultorio(id:number, idConsultorio:number): Promise<EmpleadoEntity> {
+        const empleado = await this.findOne(id);
+
+        if (empleado.tipoEmpleado.nombre !== 'Doctor') { throw new BadRequestException('El empleado ingresado no es un doctor'); }
+
+        empleado.consultorio = await this.consultorioService.findOne(idConsultorio);
+
+        return this.empleadoRepository.save(empleado);
+    }
 }

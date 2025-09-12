@@ -49,7 +49,13 @@ export class RegistrarEmpleadoDTO extends RegistrarPersonaDTO {
     //Doctor
     @IsNumber()
     @IsOptional()
-    idEspecialidad: number;
+    idEspecialidad?: number;
+
+    @IsNumber()
+    @IsOptional()
+    idConsultorio?: number;
+
+
 }
 
 export class RegistrarPacienteDTO extends RegistrarPersonaDTO {
