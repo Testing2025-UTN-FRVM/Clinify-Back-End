@@ -18,7 +18,7 @@ export class PacienteController {
     }
 
     @UseGuards(AuthGuard)
-    @Permissions(['PACIENTES_CREATE'])
+    @Permissions(['PACIENTES_EDIT'])
     @Patch('edit/:id')
     edit(@Body() dto: PatchPacienteDTO, @Param('id') id: number): Promise<PacienteEntity> {
         return this.pacienteService.edit(id, dto);
