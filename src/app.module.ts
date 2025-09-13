@@ -13,8 +13,6 @@ import { TipoEmpleadoService } from './services/tipo-empleado/tipo-empleado.serv
 import { TipoEmpleadoController } from './services/tipo-empleado/tipo-empleado.controller';
 import { EspecialidadService } from './services/especialidad/especialidad.service';
 import { EspecialidadController } from './services/especialidad/especialidad.controller';
-import {IsUniqueEmailConstraint} from "./common/validators/unique-email.validator";
-import {IsPersonaDocUniqueConstraint} from "./common/validators/persona-doc-unique.validator";
 import { PacienteService } from './services/paciente/paciente.service';
 import { PacienteController } from './services/paciente/paciente.controller';
 import { GrupoSanguineoService } from './services/grupo-sanguineo/grupo-sanguineo.service';
@@ -33,6 +31,8 @@ import { HistoriaClinicaController } from 'src/services/historia-clinica/histori
 import {ConsultorioService} from "src/services/consultorio/consultorio.service";
 import {ConsultorioController} from "src/services/consultorio/consultorio.controller";
 import { PersonaController } from './services/persona/persona.controller';
+import {EstadoTurnoController} from "src/services/estado-turno/estado-turno.controller";
+import {ProcedimientoController} from "src/services/procedimiento/procedimiento.controller";
 
 
 
@@ -58,7 +58,7 @@ import { PersonaController } from './services/persona/persona.controller';
     }),
     TypeOrmModule.forFeature(entities),
     ],
-    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController, PermissionsController, RolesController, HistoriaClinicaController, ConsultorioController, PersonaController],
-    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService, ProcedimientoService, EstadoTurnoService, PermissionsService, RolesService, HistoriaClinicaService, ConsultorioService]
+    controllers: [AppController, ConsultorioController, EmpleadoController, EspecialidadController, EstadoTurnoController, GrupoSanguineoController, HistoriaClinicaController, PacienteController, PermissionsController, PersonaController, ProcedimientoController, RolesController, TipoEmpleadoController, TurnoController, UsersController],
+    providers: [AuthGuard, JwtService, ConsultorioService, EmpleadoService, EspecialidadService, EstadoTurnoService, GrupoSanguineoService, HistoriaClinicaService, PacienteService, PermissionsService, PersonaService, ProcedimientoService, RolesService, TipoEmpleadoService, TurnoService, UsersService]
 })
 export class AppModule {}
