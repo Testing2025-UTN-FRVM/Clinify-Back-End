@@ -6,7 +6,7 @@ import {AuthGuard} from "src/middlewares/auth.middleware";
 import {Permissions} from "src/middlewares/decorators/permissions.decorator";
 import {PatchPacienteDTO} from "src/interfaces/patch.dto";
 
-@Controller('paciente')
+@Controller('pacientes')
 export class PacienteController {
     constructor(private readonly pacienteService:PacienteService) {}
 
