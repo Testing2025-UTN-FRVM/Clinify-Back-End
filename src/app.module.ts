@@ -33,6 +33,8 @@ import {ConsultorioController} from "src/services/consultorio/consultorio.contro
 import { PersonaController } from './services/persona/persona.controller';
 import {EstadoTurnoController} from "src/services/estado-turno/estado-turno.controller";
 import {ProcedimientoController} from "src/services/procedimiento/procedimiento.controller";
+import {IsUniqueEmailConstraint} from "src/common/validators/unique-email.validator";
+import {IsPersonaDocUniqueConstraint} from "src/common/validators/persona-doc-unique.validator";
 
 
 
@@ -59,6 +61,6 @@ import {ProcedimientoController} from "src/services/procedimiento/procedimiento.
     TypeOrmModule.forFeature(entities),
     ],
     controllers: [AppController, ConsultorioController, EmpleadoController, EspecialidadController, EstadoTurnoController, GrupoSanguineoController, HistoriaClinicaController, PacienteController, PermissionsController, PersonaController, ProcedimientoController, RolesController, TipoEmpleadoController, TurnoController, UsersController],
-    providers: [AuthGuard, JwtService, ConsultorioService, EmpleadoService, EspecialidadService, EstadoTurnoService, GrupoSanguineoService, HistoriaClinicaService, PacienteService, PermissionsService, PersonaService, ProcedimientoService, RolesService, TipoEmpleadoService, TurnoService, UsersService]
+    providers: [AuthGuard, JwtService, IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, ConsultorioService, EmpleadoService, EspecialidadService, EstadoTurnoService, GrupoSanguineoService, HistoriaClinicaService, PacienteService, PermissionsService, PersonaService, ProcedimientoService, RolesService, TipoEmpleadoService, TurnoService, UsersService]
 })
 export class AppModule {}
