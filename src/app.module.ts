@@ -32,6 +32,7 @@ import { HistoriaClinicaService } from 'src/services/historia-clinica/historia-c
 import { HistoriaClinicaController } from 'src/services/historia-clinica/historia-clinica.controller';
 import {ConsultorioService} from "src/services/consultorio/consultorio.service";
 import {ConsultorioController} from "src/services/consultorio/consultorio.controller";
+import { PersonaController } from './services/persona/persona.controller';
 
 
 
@@ -57,7 +58,7 @@ import {ConsultorioController} from "src/services/consultorio/consultorio.contro
     }),
     TypeOrmModule.forFeature(entities),
     ],
-    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController, PermissionsController, RolesController, HistoriaClinicaController, ConsultorioController],
+    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController, PermissionsController, RolesController, HistoriaClinicaController, ConsultorioController, PersonaController],
     providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService, ProcedimientoService, EstadoTurnoService, PermissionsService, RolesService, HistoriaClinicaService, ConsultorioService]
 })
 export class AppModule {}
