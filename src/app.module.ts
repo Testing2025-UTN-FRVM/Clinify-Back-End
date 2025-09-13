@@ -30,6 +30,8 @@ import { RolesController } from 'src/services/roles/roles.controller';
 import { RolesService } from 'src/services/roles/roles.service';
 import { HistoriaClinicaService } from 'src/services/historia-clinica/historia-clinica.service';
 import { HistoriaClinicaController } from 'src/services/historia-clinica/historia-clinica.controller';
+import {ConsultorioService} from "src/services/consultorio/consultorio.service";
+import {ConsultorioController} from "src/services/consultorio/consultorio.controller";
 
 
 
@@ -55,7 +57,7 @@ import { HistoriaClinicaController } from 'src/services/historia-clinica/histori
     }),
     TypeOrmModule.forFeature(entities),
     ],
-    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController, PermissionsController, RolesController, HistoriaClinicaController],
-    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService, ProcedimientoService, EstadoTurnoService, PermissionsService, RolesService, HistoriaClinicaService]
+    controllers: [AppController, UsersController, EmpleadoController, TipoEmpleadoController, EspecialidadController, PacienteController, GrupoSanguineoController, TurnoController, PermissionsController, RolesController, HistoriaClinicaController, ConsultorioController],
+    providers: [AuthGuard, JwtService, UsersService, EmpleadoService, TipoEmpleadoService, EspecialidadService,IsUniqueEmailConstraint, IsPersonaDocUniqueConstraint, PacienteService, GrupoSanguineoService, PersonaService, TurnoService, ProcedimientoService, EstadoTurnoService, PermissionsService, RolesService, HistoriaClinicaService, ConsultorioService]
 })
 export class AppModule {}
