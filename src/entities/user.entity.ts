@@ -24,7 +24,8 @@ export class UserEntity extends BaseEntity implements UserI {
     @Column()
     password: string;
 
-    @ManyToMany(() => RoleEntity, role => role.users)
+    @ManyToMany(() => RoleEntity, role => role.users,
+        { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinTable()
     roles: RoleEntity[];
 

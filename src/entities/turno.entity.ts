@@ -19,23 +19,28 @@ export class TurnoEntity {
     @Column()
     motivo: string;
 
-    @ManyToOne(()=> ProcedimientoEntity,(procedimiento) => procedimiento.turnos)
+    @ManyToOne(()=> ProcedimientoEntity,(procedimiento) => procedimiento.turnos,
+        { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({name: 'procedimiento'})
     procedimiento: ProcedimientoEntity;
 
-    @ManyToOne(()=> EstadoTurnoEntity, (estado) => estado.turnos)
+    @ManyToOne(()=> EstadoTurnoEntity, (estado) => estado.turnos,
+        { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({name: 'estado'})
     estado: EstadoTurnoEntity;
 
-    @ManyToOne(()=> EmpleadoEntity, (doctor) => doctor.turnos)
+    @ManyToOne(()=> EmpleadoEntity, (doctor) => doctor.turnos,
+        { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({name: 'doctor'})
     doctor: EmpleadoEntity;
 
-    @ManyToOne(()=> PacienteEntity, (paciente) => paciente.turnos)
+    @ManyToOne(()=> PacienteEntity, (paciente) => paciente.turnos,
+        { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({name: 'paciente'})
     paciente: PacienteEntity;
 
-    @ManyToOne(()=> EspecialidadEntity, (especialidad) => especialidad.turnos)
+    @ManyToOne(()=> EspecialidadEntity, (especialidad) => especialidad.turnos,
+        { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({name: 'especialidad'})
     especialidad: EspecialidadEntity;
 

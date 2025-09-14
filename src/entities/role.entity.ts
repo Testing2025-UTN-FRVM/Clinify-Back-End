@@ -13,7 +13,8 @@ export class RoleEntity extends BaseEntity {
     @ManyToMany(() => UserEntity, user => user.roles)
     users: UserEntity[];
 
-    @ManyToMany(() => PermissionEntity, permission => permission.roles)
+    @ManyToMany(() => PermissionEntity, permission => permission.roles,
+        { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinTable()
     permissions: PermissionEntity[];
 }

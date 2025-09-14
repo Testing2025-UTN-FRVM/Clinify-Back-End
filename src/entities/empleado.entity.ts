@@ -34,15 +34,18 @@ export class EmpleadoEntity extends BaseEntity {
     @JoinColumn({ name: 'user_id' })
     user: UserEntity;
 
-    @ManyToOne(()=> EspecialidadEntity, (especialidad) => especialidad.empleados)
+    @ManyToOne(()=> EspecialidadEntity, (especialidad) => especialidad.empleados,
+        { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({name: 'especialidad_id'})
     especialidad: EspecialidadEntity;
 
-    @ManyToMany(()=> ProcedimientoEntity, (procedimiento) => procedimiento.doctores)
+    @ManyToMany(()=> ProcedimientoEntity, (procedimiento) => procedimiento.doctores,
+        { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinTable()
     procedimientos: ProcedimientoEntity[];
 
-    @ManyToOne(()=> ConsultorioEntity, (consultorio) => consultorio.empleados)
+    @ManyToOne(()=> ConsultorioEntity, (consultorio) => consultorio.empleados,
+        { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({name: 'consultorio_id'})
     consultorio: ConsultorioEntity;
 
