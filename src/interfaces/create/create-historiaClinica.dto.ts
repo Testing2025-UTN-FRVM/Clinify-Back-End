@@ -12,8 +12,4 @@ export class CreateHistoriaClinicaDTO {
     @IsNotEmpty()
     @IsNumber()
     paciente: number;
-
-    @IsNotEmpty()
-    @IsNumber()
-    doctor: number;
 }

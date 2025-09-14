@@ -1,9 +1,9 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
-import {EspecialidadEntity} from "../../entities/especialidad.entity";
+import {EspecialidadEntity} from "src/entities/especialidad.entity";
 import {Repository} from "typeorm";
-import {CreateEspecialidadDto} from "../../interfaces/create/create-especialidad.dto";
-import {PatchEspecialidad} from "../../interfaces/patch/patch-especialidad.dto";
+import {CreateEspecialidadDto} from "src/interfaces/create/create-especialidad.dto";
+import {PatchEspecialidad} from "src/interfaces/patch/patch-especialidad.dto";
 
 @Injectable()
 export class EspecialidadService {

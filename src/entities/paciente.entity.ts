@@ -22,7 +22,10 @@ export class PacienteEntity extends BaseEntity {
     @JoinColumn({name: 'persona_id'})
     persona: PersonaEntity;
 
-    @ManyToOne(()=> GrupoSanguineoEntity, (grupoSanguineo) => grupoSanguineo.pacientes)
+    @ManyToOne(()=> GrupoSanguineoEntity, (grupoSanguineo) => grupoSanguineo.pacientes,
+        {
+            nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE'
+        })
     @JoinColumn({name: 'grupo_sanguineo'})
     grupoSanguineo: GrupoSanguineoEntity;
 

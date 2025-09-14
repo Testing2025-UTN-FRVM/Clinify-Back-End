@@ -16,11 +16,13 @@ export class HistoriaClinicaEntity {
     @Column()
     observacionExtra: string;
 
-    @ManyToOne(() => PacienteEntity, (paciente) => paciente.historiasClinicas)
+    @ManyToOne(() => PacienteEntity, (paciente) => paciente.historiasClinicas,
+        { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({name: 'paciente'})
     paciente: PacienteEntity;
 
-    @ManyToOne(()=> EmpleadoEntity, (doctor)=> doctor.historiasClinicas )
+    @ManyToOne(()=> EmpleadoEntity, (doctor)=> doctor.historiasClinicas,
+        { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinColumn({name: 'doctor'})
     doctor: EmpleadoEntity;
 }

@@ -1,10 +1,11 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectDataSource, InjectRepository} from "@nestjs/typeorm";
-import {PacienteEntity} from "../../entities/paciente.entity";
+import {PacienteEntity} from "src/entities/paciente.entity";
 import {DataSource, Repository} from "typeorm";
-import {RegistrarPacienteDTO} from "../../interfaces/register.dto";
+import {RegistrarPacienteDTO} from "src/interfaces/register.dto";
 import {GrupoSanguineoService} from "../grupo-sanguineo/grupo-sanguineo.service";
 import {PersonaService} from "../persona/persona.service";
+import {PatchPacienteDTO} from "src/interfaces/patch.dto";
 
 @Injectable()
 export class PacienteService {
@@ -40,6 +41,18 @@ export class PacienteService {
         }catch (error) {
             throw new Error(error.message,error.stack);
         }
+    }
+
+    async edit(id: number, dto: PatchPacienteDTO): Promise<PacienteEntity> {
+        const paciente = await this.findOne(id);
+
+        if (dto.idGrupoSanguineo) {
+            paciente.grupoSanguineo = await this.grupoSanguineoService.findById(dto.idGrupoSanguineo);
+        }
+
+        this.pacienteRepository.merge(paciente, dto);
+
+        return await this.pacienteRepository.save(paciente);
     }
 
     async findOne(id: number): Promise<PacienteEntity> {

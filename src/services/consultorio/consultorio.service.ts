@@ -1,8 +1,9 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
-import {ConsultorioEntity} from "../../entities/consultorio.entity";
+import {ConsultorioEntity} from "src/entities/consultorio.entity";
 import {Repository} from "typeorm";
-import {CreateConsultorioDTO} from "../../interfaces/create/create-consultorio.dto";
+import {CreateConsultorioDTO} from "src/interfaces/create/create-consultorio.dto";
+import {PatchConsultorioDTO} from "src/interfaces/patch/patch-consultorio.dto";
 
 @Injectable()
 export class ConsultorioService {
@@ -14,6 +15,19 @@ export class ConsultorioService {
     async create(dto: CreateConsultorioDTO): Promise<ConsultorioEntity> {
         const consultorio = this.consultorioRepository.create(dto);
         return await this.consultorioRepository.save(consultorio);
+    }
+
+    async edit(id: number, dto: PatchConsultorioDTO): Promise<ConsultorioEntity> {
+        const consultorio = await this.findOne(id);
+        this.consultorioRepository.merge(consultorio, dto);
+        return await this.consultorioRepository.save(consultorio);
+    }
+
+    async delete(id: number): Promise<{message: string}> {
+        const consultorio = await this.findOne(id);
+        await this.consultorioRepository.remove(consultorio);
+        return {message: 'El consultorio: '+consultorio.numero+' fue eliminado correctamente'}
+
     }
 
     async findAll(): Promise<ConsultorioEntity[]> {
