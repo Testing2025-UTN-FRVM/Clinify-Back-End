@@ -1,8 +1,8 @@
 {
-  "name": "clinica-jwt_test",
-  "version": "0.0.1",
+  "name": "clinify",
+  "version": "1.0",
   "description": "",
-  "author": "",
+  "author": "Testing-Grupo_A-UTN_FRVM-2025",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
