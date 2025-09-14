@@ -1,34 +1,76 @@
-import {IsDate, IsNotEmpty, IsString} from "class-validator";
+import {IsDate, IsNotEmpty, IsNumber, IsOptional, IsString} from "class-validator";
+import {IsPersonaDocUnique} from "../common/validators/persona-doc-unique.validator";
+import {IsUniqueEmail} from "../common/validators/unique-email.validator";
 
-export type TipoUsuario = 'user' | 'empleado' | 'paciente';
-
-export class RegisterDTO {
-    tipo: TipoUsuario;
+export class RegistrarPersonaDTO {
+    //Persona
+    @IsString()
+    @IsNotEmpty()
+    nombre: string;
 
     @IsString()
     @IsNotEmpty()
+    apellido: string;
+
+    @IsDate()
+    @IsNotEmpty()
+    fechaNacimiento: Date;
+
+    @IsString()
+    @IsNotEmpty()
+    tipoDocumento: string;
+
+    @IsString()
+    @IsNotEmpty()
+    @IsPersonaDocUnique('tipoDocumento', 'nroDocumento')
+    nroDocumento: string;
+
+    @IsString()
+    @IsNotEmpty()
+    telefono: string;
+}
+
+export class RegistrarEmpleadoDTO extends RegistrarPersonaDTO {
+    //User
+    @IsString()
+    @IsNotEmpty()
+    @IsUniqueEmail()
     email: string;
 
     @IsString()
     @IsNotEmpty()
     password: string;
 
-    //Persona
-    @IsString()
-    nombre: string;
+    //Empleado
+    @IsNumber()
+    @IsNotEmpty()
+    idTipoEmpleado: number;
+
+    //Doctor
+    @IsNumber()
+    @IsOptional()
+    idEspecialidad?: number;
+
+    @IsNumber()
+    @IsOptional()
+    idConsultorio?: number;
+
+
+}
+
+export class RegistrarPacienteDTO extends RegistrarPersonaDTO {
+    @IsNumber()
+    @IsNotEmpty()
+    altura: number;
+
+    @IsNumber()
+    @IsNotEmpty()
+    peso: number;
 
     @IsString()
-    apellido: string;
+    observaciones: string;
 
-    @IsDate()
-    fechaNacimiento: Date; // ISO date string
-
-    @IsString()
-    tipoDocumento: string; // e.g., 'DNI', 'Passport'
-
-    @IsString()
-    nroDocumento: string; // e.g., '12345678'
-
-    @IsString()
-    telefono: string; // e.g., '123-456-7890'
+    @IsNumber()
+    @IsNotEmpty()
+    idGrupoSanguineo: number;
 }

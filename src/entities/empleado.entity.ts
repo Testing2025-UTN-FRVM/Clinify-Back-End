@@ -1,11 +1,57 @@
-import {ChildEntity, JoinColumn, ManyToOne} from "typeorm";
-import {PersonaEntity} from "./persona.entity";
+import {
+    BaseEntity,
+    Entity,
+    JoinColumn, JoinTable,
+    ManyToMany,
+    ManyToOne,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn
+} from "typeorm";
 import {TipoEmpleadoEntity} from "./tipoEmpleado.entity";
+import {UserEntity} from "./user.entity";
+import {EspecialidadEntity} from "./especialidad.entity";
+import {ConsultorioEntity} from "./consultorio.entity";
+import {HistoriaClinicaEntity} from "./historiaClinica.entity";
+import {TurnoEntity} from "./turno.entity";
+import {PersonaEntity} from "./persona.entity";
+import {ProcedimientoEntity} from "./procedimiento.entity";
 
-@ChildEntity('empleado')
-export class EmpleadoEntity extends PersonaEntity {
+@Entity('empleado')
+export class EmpleadoEntity extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @ManyToOne(() => TipoEmpleadoEntity, (tipoEmpleado) => tipoEmpleado)
     @JoinColumn({name:'tipo_empleado_id'})
     tipoEmpleado: TipoEmpleadoEntity;
+
+    @OneToOne(()=> PersonaEntity, { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
+    @JoinColumn({name: 'persona_id'})
+    persona: PersonaEntity;
+
+    @OneToOne(() => UserEntity, { nullable: false, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
+    @JoinColumn({ name: 'user_id' })
+    user: UserEntity;
+
+    @ManyToOne(()=> EspecialidadEntity, (especialidad) => especialidad.empleados,
+        { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
+    @JoinColumn({name: 'especialidad_id'})
+    especialidad: EspecialidadEntity;
+
+    @ManyToMany(()=> ProcedimientoEntity, (procedimiento) => procedimiento.doctores,
+        { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
+    @JoinTable()
+    procedimientos: ProcedimientoEntity[];
+
+    @ManyToOne(()=> ConsultorioEntity, (consultorio) => consultorio.empleados,
+        { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
+    @JoinColumn({name: 'consultorio_id'})
+    consultorio: ConsultorioEntity;
+
+    @OneToOne(() => HistoriaClinicaEntity, (historiaClinica) => historiaClinica.doctor)
+    historiasClinicas: HistoriaClinicaEntity[];
+
+    @OneToMany(()=> TurnoEntity, (turno) => turno.doctor)
+    turnos: TurnoEntity[];
 }

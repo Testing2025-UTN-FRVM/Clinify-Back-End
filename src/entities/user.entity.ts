@@ -1,32 +1,46 @@
-import { UserI } from '../interfaces/user.interface';
+import { UserI } from '../interfaces/JWT/user.interface';
 import {
-    BaseEntity,
+    BaseEntity, BeforeInsert, BeforeUpdate,
     Column,
     Entity,
-    Index,
     JoinTable,
-    ManyToMany,
-    PrimaryGeneratedColumn,
-    TableInheritance
+    ManyToMany, OneToOne,
+    PrimaryGeneratedColumn, Unique
 } from 'typeorm';
 import {RoleEntity} from "./role.entity";
+import { hashSync } from 'bcrypt';
+import {EmpleadoEntity} from "./empleado.entity";
+
+@Unique('UQ_users_email',['email'])
 
 @Entity('users')
-@TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class UserEntity extends BaseEntity implements UserI {
     @PrimaryGeneratedColumn()
     id: number;
-    @Index({unique:true})
+
     @Column()
     email: string;
+
     @Column()
     password: string;
 
-    @ManyToMany(() => RoleEntity, role => role.users)
+    @ManyToMany(() => RoleEntity, role => role.users,
+        { nullable: true, eager: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     @JoinTable()
     roles: RoleEntity[];
 
+    @OneToOne(() => EmpleadoEntity, (empleado) => empleado.user)
+    empleado: EmpleadoEntity;
+
     get permissionCodes(): string[] {
         return this.roles?.flatMap(role => role.permissions.map(permission => permission.code)) || [];
+    }
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword() {
+        if (this.password && !this.password.startsWith('$2')) {
+            this.password = await hashSync(this.password, 10);
+        }
     }
 }

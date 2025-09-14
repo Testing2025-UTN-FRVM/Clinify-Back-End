@@ -1,8 +1,21 @@
-import {ChildEntity, Column, Index} from "typeorm";
-import {UserEntity} from "./user.entity";
+import {
+    Entity,
+    Column,
+    Index,
+    BaseEntity,
+    PrimaryGeneratedColumn,
+    OneToOne
+} from "typeorm";
+import {EmpleadoEntity} from "./empleado.entity";
+import {PacienteEntity} from "./paciente.entity";
 
-@ChildEntity('persona')
-export class PersonaEntity extends UserEntity {
+@Index('UQ_users_doc', ['tipoDocumento', 'numeroDocumento'], { unique: true })
+
+@Entity('persona')
+export class PersonaEntity extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @Column({nullable: false})
     nombre: string;
 
@@ -16,9 +29,14 @@ export class PersonaEntity extends UserEntity {
     tipoDocumento: string;
 
     @Column({nullable: false})
-    @Index({unique: true})
     numeroDocumento: string;
 
     @Column({nullable: true})
     telefono: string;
+
+    @OneToOne(() => EmpleadoEntity, (empleado) => empleado.persona)
+    empleado: EmpleadoEntity;
+
+    @OneToOne(()=> PacienteEntity, (paciente) => paciente.persona)
+    paciente: PacienteEntity;
 }

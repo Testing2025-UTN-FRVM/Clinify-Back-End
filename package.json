@@ -1,8 +1,8 @@
 {
-  "name": "clinica-jwt_test",
-  "version": "0.0.1",
+  "name": "clinify",
+  "version": "1.0",
   "description": "",
-  "author": "",
+  "author": "Testing-Grupo_A-UTN_FRVM-2025",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -25,7 +25,9 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
+    "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.3",
@@ -47,7 +49,7 @@
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^16.0.0",
-    "jest": "^30.0.0",
+    "jest": "^30.1.3",
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
@@ -64,10 +66,14 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
+    "roots": ["<rootDir>/src"],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/src/$1"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
@@ -75,4 +81,5 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
+  
 }
