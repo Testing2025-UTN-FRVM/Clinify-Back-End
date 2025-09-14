@@ -54,7 +54,7 @@ import {IsPersonaDocUniqueConstraint} from "src/common/validators/persona-doc-un
             //username: configService.get('DB_USERNAME'),
             //password: configService.get('DB_PASSWORD'),
             //database: configService.get('DB_DATABASE'),
-            ssl:true,
+            //ssl:true,
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
             synchronize: true,
         }),
