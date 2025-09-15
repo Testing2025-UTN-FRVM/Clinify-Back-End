@@ -1,8 +1,8 @@
 {
-  "name": "clinica-jwt_test",
-  "version": "0.0.1",
+  "name": "clinify",
+  "version": "1.0",
   "description": "",
-  "author": "",
+  "author": "Testing-Grupo_A-UTN_FRVM-2025",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -17,7 +17,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "heroku-postbuild": "npm run build"
+  },
+  "engines": {
+    "node": "24"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
