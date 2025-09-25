@@ -34,16 +34,16 @@ export class EmpleadoController {
 
     @UseGuards(AuthGuard)
     @Permissions(['BASE_ACCESS'])
-    @Get(':id')
-    findOne(@Param('id') id:number): Promise<EmpleadoEntity> {
-        return this.empleadoService.findOne(id);
+    @Get('doctors')
+    findAllDoctors(): Promise<EmpleadoEntity[]> {
+        return this.empleadoService.findAllDoctors();
     }
 
     @UseGuards(AuthGuard)
     @Permissions(['BASE_ACCESS'])
-    @Get('doctors')
-    findAllDoctors(): Promise<EmpleadoEntity[]> {
-        return this.empleadoService.findAllDoctors();
+    @Get(':id')
+    findOne(@Param('id') id:number): Promise<EmpleadoEntity> {
+        return this.empleadoService.findOne(id);
     }
 
     @UseGuards(AuthGuard)
