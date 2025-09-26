@@ -67,8 +67,8 @@ export class EmpleadoController {
 
     @UseGuards(AuthGuard)
     @Permissions(['EMPLEADOS_EDIT'])
-    @Patch(':id/permisos')
-    assignPermisos(@Param('id') id:number, @Body() dto:AssignProcedimientosDTO): Promise<EmpleadoEntity> {
+    @Patch(':id/procedimientos')
+    assignProcedimientos(@Param('id') id:number, @Body() dto:AssignProcedimientosDTO): Promise<EmpleadoEntity> {
         return this.empleadoService.assignProcedimiento(id,dto)
     }
 
