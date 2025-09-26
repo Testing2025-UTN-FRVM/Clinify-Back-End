@@ -1,12 +1,12 @@
 import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards} from '@nestjs/common';
 import {ProcedimientoService} from "./procedimiento.service";
-import {CreateProcedimientoDTO} from "../../interfaces/create/create-procedimiento.dto";
-import {ProcedimientoEntity} from "../../entities/procedimiento.entity";
-import {PatchProcedimientoDTO} from "../../interfaces/patch/patch-procedimiento.dto";
-import {AuthGuard} from "../../middlewares/auth.middleware";
-import {Permissions} from "../../middlewares/decorators/permissions.decorator";
+import {CreateProcedimientoDTO} from "src/interfaces/create/create-procedimiento.dto";
+import {ProcedimientoEntity} from "src/entities/procedimiento.entity";
+import {PatchProcedimientoDTO} from "src/interfaces/patch/patch-procedimiento.dto";
+import {AuthGuard} from "src/middlewares/auth.middleware";
+import {Permissions} from "src/middlewares/decorators/permissions.decorator";
 
-@Controller('procedimiento')
+@Controller('procedimientos')
 export class ProcedimientoController {
     constructor(private readonly procedimientoService: ProcedimientoService) {}
 

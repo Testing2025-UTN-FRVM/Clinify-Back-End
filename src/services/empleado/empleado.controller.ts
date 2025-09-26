@@ -5,7 +5,12 @@ import {EmpleadoEntity} from "src/entities/empleado.entity";
 import {AuthGuard} from "src/middlewares/auth.middleware";
 import * as requestUser from "src/interfaces/JWT/request-user";
 import {Permissions} from "src/middlewares/decorators/permissions.decorator";
-import {PatchConsultorioDTO, PatchEspecialidadDTO, PatchTipoEmpleadoDTO} from "src/interfaces/patch/patch-empleado.dto";
+import {
+    AssignProcedimientosDTO,
+    PatchConsultorioDTO,
+    PatchEspecialidadDTO,
+    PatchTipoEmpleadoDTO
+} from "src/interfaces/patch/patch-empleado.dto";
 
 @Controller('empleados')
 export class EmpleadoController {
@@ -58,6 +63,13 @@ export class EmpleadoController {
     @Patch(':id/especialidad')
     changeEspecialidad(@Param('id') id:number, @Body() dto:PatchEspecialidadDTO): Promise<EmpleadoEntity> {
         return this.empleadoService.assignEspecialidad(id,dto.idEspecialidad);
+    }
+
+    @UseGuards(AuthGuard)
+    @Permissions(['EMPLEADOS_EDIT'])
+    @Patch(':id/permisos')
+    assignPermisos(@Param('id') id:number, @Body() dto:AssignProcedimientosDTO): Promise<EmpleadoEntity> {
+        return this.empleadoService.assignProcedimiento(id,dto)
     }
 
     @UseGuards(AuthGuard)
