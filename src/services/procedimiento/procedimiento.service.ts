@@ -1,9 +1,9 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
-import {ProcedimientoEntity} from "../../entities/procedimiento.entity";
+import {ProcedimientoEntity} from "src/entities/procedimiento.entity";
 import {Repository} from "typeorm";
-import {CreateProcedimientoDTO} from "../../interfaces/create/create-procedimiento.dto";
-import {PatchProcedimientoDTO} from "../../interfaces/patch/patch-procedimiento.dto";
+import {CreateProcedimientoDTO} from "src/interfaces/create/create-procedimiento.dto";
+import {PatchProcedimientoDTO} from "src/interfaces/patch/patch-procedimiento.dto";
 
 @Injectable()
 export class ProcedimientoService {
