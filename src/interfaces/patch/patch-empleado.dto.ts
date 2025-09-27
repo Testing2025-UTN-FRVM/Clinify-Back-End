@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsNumber} from "class-validator";
+import {IsArray, IsNotEmpty, IsNumber} from "class-validator";
 
 export class PatchTipoEmpleadoDTO {
     @IsNumber()
@@ -16,4 +16,11 @@ export class PatchConsultorioDTO {
     @IsNumber()
     @IsNotEmpty()
     idConsultorio: number;
+}
+
+export class AssignProcedimientosDTO {
+    @IsNumber({},{each: true})
+    @IsNotEmpty()
+    @IsArray()
+    procedimientosIds: number[];
 }

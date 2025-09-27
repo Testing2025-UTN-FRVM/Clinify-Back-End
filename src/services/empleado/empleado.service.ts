@@ -9,6 +9,8 @@ import {EspecialidadService} from "../especialidad/especialidad.service";
 import {PersonaService} from "../persona/persona.service";
 import {UserEntity} from "src/entities/user.entity";
 import {ConsultorioService} from "src/services/consultorio/consultorio.service";
+import {AssignProcedimientosDTO} from "src/interfaces/patch/patch-empleado.dto";
+import {ProcedimientoService} from "src/services/procedimiento/procedimiento.service";
 
 @Injectable()
 export class EmpleadoService {
@@ -18,6 +20,7 @@ export class EmpleadoService {
         private readonly especialidadService: EspecialidadService,
         private readonly personaService: PersonaService,
         private readonly consultorioService: ConsultorioService,
+        private readonly procedimientoService: ProcedimientoService,
 
         @InjectRepository(EmpleadoEntity)
         private readonly empleadoRepository: Repository<EmpleadoEntity>,
@@ -103,6 +106,14 @@ export class EmpleadoService {
 
         empleado.especialidad = await this.especialidadService.findOne(idEspecialidad);
         return this.empleadoRepository.save(empleado);
+    }
+
+    async assignProcedimiento(id:number, dto:AssignProcedimientosDTO): Promise<EmpleadoEntity> {
+        const empleado = await this.findOne(id);
+
+        empleado.procedimientos = await Promise.all(dto.procedimientosIds.map((procedimientoId)=> this.procedimientoService.findOne(procedimientoId)));
+
+        return await this.empleadoRepository.save(empleado);
     }
 
     async assignConsultorio(id:number, idConsultorio:number): Promise<EmpleadoEntity> {
