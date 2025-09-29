@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PersonaController } from './persona.controller';
 import { PersonaService } from './persona.service';
@@ -38,5 +39,13 @@ describe('PersonaController', () => {
 
     await expect(controller.edit(1, dto)).resolves.toBe(expected);
     expect(service.edit).toHaveBeenCalledWith(1, dto);
+  });
+
+  it('should bubble up edition errors', async () => {
+    const dto = { nombre: 'John' } as any;
+    const error = new NotFoundException('persona not found');
+    service.edit.mockRejectedValue(error);
+
+    await expect(controller.edit(1, dto)).rejects.toBe(error);
   });
 });

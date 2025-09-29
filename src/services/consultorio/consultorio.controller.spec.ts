@@ -1,4 +1,7 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
 import { ConsultorioController } from './consultorio.controller';
 import { ConsultorioService } from './consultorio.service';
 import { ConsultorioEntity } from 'src/entities/consultorio.entity';
@@ -46,6 +49,14 @@ describe('ConsultorioController', () => {
     expect(service.create).toHaveBeenCalledWith(dto);
   });
 
+  it('should bubble up creation errors', async () => {
+    const dto = { descripcion: 'A1' } as CreateConsultorioDTO;
+    const error = new NotFoundException('related entity missing');
+    service.create.mockRejectedValue(error);
+
+    await expect(controller.create(dto)).rejects.toBe(error);
+  });
+
   it('should delegate edition to the service', async () => {
     const dto = { descripcion: 'Updated' } as PatchConsultorioDTO;
     const expected = { id: 1, descripcion: 'Updated' } as ConsultorioEntity;
@@ -55,12 +66,27 @@ describe('ConsultorioController', () => {
     expect(service.edit).toHaveBeenCalledWith(1, dto);
   });
 
+  it('should bubble up edition errors', async () => {
+    const dto = { descripcion: 'Updated' } as PatchConsultorioDTO;
+    const error = new NotFoundException('consultorio not found');
+    service.edit.mockRejectedValue(error);
+
+    await expect(controller.edit(dto, 1)).rejects.toBe(error);
+  });
+
   it('should delegate deletion to the service', async () => {
     const expected = { message: 'deleted' };
     service.delete.mockResolvedValue(expected);
 
     await expect(controller.delete(3)).resolves.toBe(expected);
     expect(service.delete).toHaveBeenCalledWith(3);
+  });
+
+  it('should bubble up deletion errors', async () => {
+    const error = new NotFoundException('consultorio not found');
+    service.delete.mockRejectedValue(error);
+
+    await expect(controller.delete(3)).rejects.toBe(error);
   });
 
   it('should return all consultorios from the service', async () => {
@@ -77,5 +103,33 @@ describe('ConsultorioController', () => {
 
     await expect(controller.findOne(4)).resolves.toBe(expected);
     expect(service.findOne).toHaveBeenCalledWith(4);
+  });
+
+  it('should bubble up lookup errors', async () => {
+    const error = new NotFoundException('consultorio not found');
+    service.findOne.mockRejectedValue(error);
+
+    await expect(controller.findOne(4)).rejects.toBe(error);
+  });
+
+  describe('DTO validation', () => {
+    it('should invalidate empty create payload', async () => {
+      const dto = plainToInstance(CreateConsultorioDTO, {});
+      const errors = await validate(dto);
+
+      expect(errors).toHaveLength(2);
+      expect(errors.map((err) => err.property).sort()).toEqual([
+        'numero',
+        'observaciones',
+      ]);
+    });
+
+    it('should invalidate patch payload with wrong types', async () => {
+      const dto = plainToInstance(PatchConsultorioDTO, { numero: 'bad' });
+      const errors = await validate(dto);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].property).toBe('numero');
+    });
   });
 });
