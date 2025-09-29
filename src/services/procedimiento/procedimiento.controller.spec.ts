@@ -1,81 +1,79 @@
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProcedimientoController } from './procedimiento.controller';
 import { ProcedimientoService } from './procedimiento.service';
-import { CreateProcedimientoDTO } from 'src/interfaces/create/create-procedimiento.dto';
-import { PatchProcedimientoDTO } from 'src/interfaces/patch/patch-procedimiento.dto';
 import { ProcedimientoEntity } from 'src/entities/procedimiento.entity';
+import { AuthGuard } from 'src/middlewares/auth.middleware';
 
 describe('ProcedimientoController', () => {
   let controller: ProcedimientoController;
-  let service: ProcedimientoService;
+  let service: jest.Mocked<ProcedimientoService>;
 
-  const procedimientoMock: ProcedimientoEntity = {
-    id: 1,
-    nombre: 'Proc1',
-    descripcion: 'Desc1',
-    duracion: 30,
-    turnos: [],
-    doctores: [],
-  };
-
-  const serviceMock = {
-    create: jest.fn().mockResolvedValue(procedimientoMock),
-    findAll: jest.fn().mockResolvedValue([procedimientoMock]),
-    findOne: jest.fn().mockResolvedValue(procedimientoMock),
-    patch: jest.fn().mockResolvedValue({ ...procedimientoMock, descripcion: 'Modificado' }),
-    delete: jest.fn().mockResolvedValue({ message: `Procedimiento: ${procedimientoMock.nombre} eliminado correctamente` }),
-  };
+  const mockService = () => ({
+    create: jest.fn(),
+    findAll: jest.fn(),
+    findOne: jest.fn(),
+    patch: jest.fn(),
+    delete: jest.fn(),
+  });
 
   beforeEach(async () => {
+    const guard = { canActivate: jest.fn().mockResolvedValue(true) };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProcedimientoController],
       providers: [
         {
           provide: ProcedimientoService,
-          useValue: serviceMock,
+          useValue: mockService(),
         },
       ],
-    }).compile();
+    })
+      .overrideGuard(AuthGuard)
+      .useValue(guard)
+      .compile();
 
-    controller = module.get<ProcedimientoController>(ProcedimientoController);
-    service = module.get<ProcedimientoService>(ProcedimientoService);
-    jest.clearAllMocks();
+    controller = module.get(ProcedimientoController);
+    service = module.get(ProcedimientoService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+  it('should create a procedure', async () => {
+    const dto = { descripcion: 'Eco' } as any;
+    const expected = { id: 1 } as ProcedimientoEntity;
+    service.create.mockResolvedValue(expected);
 
-  it('should create a procedimiento', async () => {
-    const dto: CreateProcedimientoDTO = { nombre: 'Proc1', descripcion: 'Desc1', duracion: 30 };
-    const result = await controller.createProcedimiento(dto);
+    await expect(controller.createProcedimiento(dto)).resolves.toBe(expected);
     expect(service.create).toHaveBeenCalledWith(dto);
-    expect(result).toEqual(procedimientoMock);
   });
 
-  it('should return all procedimientos', async () => {
-    const result = await controller.findAll();
-    expect(service.findAll).toHaveBeenCalled();
-    expect(result).toEqual([procedimientoMock]);
+  it('should list procedures', async () => {
+    const expected = [{ id: 1 }] as ProcedimientoEntity[];
+    service.findAll.mockResolvedValue(expected);
+
+    await expect(controller.findAll()).resolves.toBe(expected);
+    expect(service.findAll).toHaveBeenCalledTimes(1);
   });
 
-  it('should return one procedimiento by id', async () => {
-    const result = await controller.findOne(1);
-    expect(service.findOne).toHaveBeenCalledWith(1);
-    expect(result).toEqual(procedimientoMock);
+  it('should get one procedure', async () => {
+    const expected = { id: 5 } as ProcedimientoEntity;
+    service.findOne.mockResolvedValue(expected);
+
+    await expect(controller.findOne(5)).resolves.toBe(expected);
+    expect(service.findOne).toHaveBeenCalledWith(5);
   });
 
-  it('should patch a procedimiento', async () => {
-    const patchDto: PatchProcedimientoDTO = { descripcion: 'Modificado' };
-    const result = await controller.patch(1, patchDto);
-    expect(service.patch).toHaveBeenCalledWith(1, patchDto);
-    expect(result).toEqual({ ...procedimientoMock, descripcion: 'Modificado' });
+  it('should patch a procedure', async () => {
+    const dto = { descripcion: 'Updated' } as any;
+    const expected = { id: 3 } as ProcedimientoEntity;
+    service.patch.mockResolvedValue(expected);
+
+    await expect(controller.patch(3, dto)).resolves.toBe(expected);
+    expect(service.patch).toHaveBeenCalledWith(3, dto);
   });
 
-  it('should delete a procedimiento', async () => {
-    const result = await controller.delete(1);
-    expect(service.delete).toHaveBeenCalledWith(1);
-    expect(result).toEqual({ message: `Procedimiento: ${procedimientoMock.nombre} eliminado correctamente` });
+  it('should delete a procedure', async () => {
+    const expected = { message: 'deleted' };
+    service.delete.mockResolvedValue(expected);
+
+    await expect(controller.delete(6)).resolves.toBe(expected);
+    expect(service.delete).toHaveBeenCalledWith(6);
   });
 });

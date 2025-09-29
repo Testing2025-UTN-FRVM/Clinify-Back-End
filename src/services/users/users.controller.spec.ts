@@ -1,41 +1,85 @@
+import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
-import { LoginDTO } from '../../interfaces/login.dto';
-
+import { UsersService } from './users.service';
+import { UserEntity } from 'src/entities/user.entity';
+import { AuthGuard } from 'src/middlewares/auth.middleware';
 
 describe('UsersController', () => {
   let controller: UsersController;
-  let service: any;
+  let service: jest.Mocked<UsersService>;
 
-  beforeEach(() => {
-    service = {
-      login: jest.fn(),
-      refreshToken: jest.fn(),
-    };
-    controller = new UsersController(service as any);
+  const mockService = () => ({
+    login: jest.fn(),
+    canDo: jest.fn(),
+    refreshToken: jest.fn(),
+    assignRoles: jest.fn(),
+    removeRole: jest.fn(),
   });
 
-  it('me should return user email from request', () => {
-    const req = { user: { email: 'test@correo.com' } };
-    const result = controller.me(req as any);
-    expect(result).toEqual({ email: 'test@correo.com' });
+  beforeEach(async () => {
+    const guard = { canActivate: jest.fn().mockResolvedValue(true) };
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UsersController],
+      providers: [
+        {
+          provide: UsersService,
+          useValue: mockService(),
+        },
+      ],
+    })
+      .overrideGuard(AuthGuard)
+      .useValue(guard)
+      .compile();
+
+    controller = module.get(UsersController);
+    service = module.get(UsersService);
   });
 
-  it('login should call service.login and return its result', async () => {
-    const body: LoginDTO = { email: 'a@b.com', password: '123' };
-    const expected = { accessToken: 'token' };
+  it('should return current user email', () => {
+    const req = { user: { email: 'test@email.com' } } as any;
+    expect(controller.me(req)).toEqual({ email: 'test@email.com' });
+  });
+
+  it('should login a user', async () => {
+    const dto = { email: 'test@email.com', password: '123' } as any;
+    const expected = { token: 'abc' } as any;
     service.login.mockResolvedValue(expected);
 
-    const result = await controller.login(body);
-    expect(service.login).toHaveBeenCalledWith(body);
-    expect(result).toBe(expected);
+    await expect(controller.login(dto)).resolves.toBe(expected);
+    expect(service.login).toHaveBeenCalledWith(dto);
   });
 
-  it('refreshToken should call service.refreshToken with header', async () => {
-    const req = { headers: { 'refresh-token': 'refresh123' } };
-    service.refreshToken.mockResolvedValue('ok');
+  it('should check permissions', async () => {
+    const req = { user: { id: 1 } } as any;
+    service.canDo.mockResolvedValue(true);
 
-    const result = await controller.refreshToken(req as any);
-    expect(service.refreshToken).toHaveBeenCalledWith('refresh123');
-    expect(result).toBe('ok');
+    await expect(controller.canDo(req, 'PERMISSION')).resolves.toBe(true);
+    expect(service.canDo).toHaveBeenCalledWith(req.user, 'PERMISSION');
+  });
+
+  it('should refresh a token from headers', async () => {
+    const request = { headers: { 'refresh-token': 'token' } } as any;
+    const expected = { token: 'new' } as any;
+    service.refreshToken.mockResolvedValue(expected);
+
+    await expect(controller.refreshToken(request)).resolves.toBe(expected);
+    expect(service.refreshToken).toHaveBeenCalledWith('token');
+  });
+
+  it('should assign a role to a user', async () => {
+    const dto = { rolesIds: [1] } as any;
+    const expected = { id: 3 } as UserEntity;
+    service.assignRoles.mockResolvedValue(expected);
+
+    await expect(controller.assignRole(3, dto)).resolves.toBe(expected);
+    expect(service.assignRoles).toHaveBeenCalledWith(3, dto);
+  });
+
+  it('should remove a role from a user', async () => {
+    const expected = { message: 'removed' };
+    service.removeRole.mockResolvedValue(expected);
+
+    await expect(controller.removeRole(3, 4)).resolves.toBe(expected);
+    expect(service.removeRole).toHaveBeenCalledWith(3, 4);
   });
 });
