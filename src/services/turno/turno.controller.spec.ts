@@ -34,7 +34,7 @@ describe("TurnoController", () => {
     const mockUser: UserEntity = {
         email: 'agustin@cmail.com',
         password: '1234'
-    }
+    } as unknown as UserEntity
 
     const mockPersonaUno: PersonaEntity = {
         id: 1,
@@ -44,7 +44,7 @@ describe("TurnoController", () => {
         tipoDocumento: 'DNI',
         numeroDocumento: '333333333',
         telefono: '3534220000',
-    }
+    } as unknown as PersonaEntity
 
     const mockPersonaDos: PersonaEntity = {
         id: 1,
@@ -54,20 +54,24 @@ describe("TurnoController", () => {
         tipoDocumento: 'DNI',
         numeroDocumento: '4444444444',
         telefono: '3534220000',
-    }
+    } as unknown as PersonaEntity
 
     const mockDoctor: EmpleadoEntity = {
         id: 1,
         persona: mockPersonaUno,
         user: mockUser,
-    }
+    } as unknown as EmpleadoEntity
 
     const mockPaciente: PacienteEntity = {
         id: 1,
         persona: mockPersonaDos,
+        altura: 170,
+        peso: 60.7,
+        observaciones: "",
+        grupoSanguineo: null,
         turnos: [],
         historiasClinicas: [],
-    }
+    } as unknown as PacienteEntity
 
     const mockEspecialidad: EspecialidadEntity = {
         id: 1,
@@ -77,7 +81,7 @@ describe("TurnoController", () => {
         fechaRegistro: new Date("2024-01-01"),
         empleados: [],
         turnos: [],
-    }
+    } as unknown as EspecialidadEntity
 
     const mockEstadoTurno: EstadoTurnoEntity = {
         id: 1,
@@ -86,7 +90,7 @@ describe("TurnoController", () => {
         activo: true,
         fechaRegistro: new Date("2024-01-01"),
         turnos: [],
-    }
+    } as unknown as EstadoTurnoEntity
 
     const createTurnoDtoValido: CreateTurnoDTO = {
         fechaHoraTurno: "2025-10-10T10:00:00Z",
@@ -95,7 +99,7 @@ describe("TurnoController", () => {
         doctor: 1,
         paciente: 1,
         especialidad: 1,
-    }
+    } as CreateTurnoDTO
 
     const mockTurnoEntity: TurnoEntity = {
         id: 1,
@@ -110,7 +114,7 @@ describe("TurnoController", () => {
         especialidad: mockEspecialidad,
         estadoTurno: mockEstadoTurno,
         historiaClinica: [],
-    }
+    } as unknown as TurnoEntity
 
     beforeEach(async () => {
         const guard = {canActivate: jest.fn().mockResolvedValue(true)}
