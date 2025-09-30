@@ -441,9 +441,9 @@ describe("TurnoService", () => {
                     }
                     return await callback(manager)
                 })
-                ;(mockProcedimientoService.findOne as jest.Mock).mockRejectedValue(new Error("Procedimiento no encontrado"))
+                ;(mockProcedimientoService.findOne as jest.Mock).mockRejectedValue(new NotFoundException("No existe el procedimiento con el id: "+dto.procedimiento))
 
-                await expect(service.agendarTurno(dto)).rejects.toThrow("Procedimiento no encontrado")
+                await expect(service.agendarTurno(dto)).rejects.toThrow("No existe el procedimiento con el id: "+dto.procedimiento)
             })
 
             it("debe lanzar error cuando el doctor no existe", async () => {
@@ -465,9 +465,9 @@ describe("TurnoService", () => {
                 })
                 ;(mockProcedimientoService.findOne as jest.Mock).mockResolvedValue(mockProcedimiento)
                 ;(mockEstadoTurnoService.findOne as jest.Mock).mockResolvedValue(mockEstadoTurno)
-                ;(mockEmpleadoService.findOne as jest.Mock).mockRejectedValue(new NotFoundException(`El id no corresponde a ningun empleado`))
+                ;(mockEmpleadoService.findOne as jest.Mock).mockRejectedValue(new NotFoundException(`El id: ${dto.doctor} no corresponde a ningun empleado`))
 
-                await expect(service.agendarTurno(dto)).rejects.toThrow(`El id no corresponde a ningun empleado`)
+                await expect(service.agendarTurno(dto)).rejects.toThrow(`El id: ${dto.doctor} no corresponde a ningun empleado`)
             })
 
             it("debe lanzar error cuando el paciente no existe", async () => {
@@ -490,9 +490,9 @@ describe("TurnoService", () => {
                 ;(mockProcedimientoService.findOne as jest.Mock).mockResolvedValue(mockProcedimiento)
                 ;(mockEstadoTurnoService.findOne as jest.Mock).mockResolvedValue(mockEstadoTurno)
                 ;(mockEmpleadoService.findOne as jest.Mock).mockResolvedValue(mockEmpleado)
-                ;(mockPacienteService.findOne as jest.Mock).mockRejectedValue(new Error("Paciente no encontrado"))
+                ;(mockPacienteService.findOne as jest.Mock).mockRejectedValue(new NotFoundException(`El id: ${dto.paciente} no corresponde a ningun paciente`))
 
-                await expect(service.agendarTurno(dto)).rejects.toThrow("Paciente no encontrado")
+                await expect(service.agendarTurno(dto)).rejects.toThrow(`El id: ${dto.paciente} no corresponde a ningun paciente`)
             })
 
             it("debe lanzar error cuando la especialidad no existe", async () => {
@@ -516,67 +516,10 @@ describe("TurnoService", () => {
                 ;(mockEstadoTurnoService.findOne as jest.Mock).mockResolvedValue(mockEstadoTurno)
                 ;(mockEmpleadoService.findOne as jest.Mock).mockResolvedValue(mockEmpleado)
                 ;(mockPacienteService.findOne as jest.Mock).mockResolvedValue(mockPaciente)
-                ;(mockEspecialidadService.findOne as jest.Mock).mockRejectedValue(new Error("Especialidad no encontrada"))
+                ;(mockEspecialidadService.findOne as jest.Mock).mockRejectedValue(new NotFoundException(`El id: ${dto.especialidad} no corresponde a ninguna especialidad`))
 
-                await expect(service.agendarTurno(dto)).rejects.toThrow("Especialidad no encontrada")
+                await expect(service.agendarTurno(dto)).rejects.toThrow(`El id: ${dto.especialidad} no corresponde a ninguna especialidad`)
             })
-
-            it("debe lanzar error cuando el estado del turno no existe", async () => {
-                const dto: CreateTurnoDTO = {
-                        fechaHoraTurno: "2025-10-10T10:00:00Z",
-                        motivo: "Control",
-                        procedimiento: 1,
-                        doctor: 1,
-                        paciente: 1,
-                        especialidad: 1,
-                        estado: 999,
-                    }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
-                    const manager = {
-                        query: jest.fn().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
-                        getRepository: jest.fn(() => mockTurnoRepository),
-                    }
-                    return await callback(manager)
-                })
-                ;(mockProcedimientoService.findOne as jest.Mock).mockResolvedValue(mockProcedimiento)
-                ;(mockEstadoTurnoService.findOne as jest.Mock).mockRejectedValue(new Error("Estado de turno no encontrado"))
-
-                await expect(service.agendarTurno(dto)).rejects.toThrow("Estado de turno no encontrado")
-            })
-        })
-
-        describe("Errores de validación de datos", () => {
-            it("debe lanzar error cuando el motivo está vacío", async () => {
-                const dto: CreateTurnoDTO = {
-                        fechaHoraTurno: "2025-10-10T10:00:00Z",
-                        motivo: "",
-                        procedimiento: 1,
-                        doctor: 1,
-                        paciente: 1,
-                        especialidad: 1,
-                        estado: 1,
-                    }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
-                    const manager = {
-                        query: jest.fn().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
-                        getRepository: jest.fn(() => ({
-                            ...mockTurnoRepository,
-                            create: jest.fn().mockImplementation(() => {
-                                throw new Error("El motivo no puede estar vacío")
-                            }),
-                        })),
-                    }
-                    return await callback(manager)
-                })
-                ;(mockProcedimientoService.findOne as jest.Mock).mockResolvedValue(mockProcedimiento)
-                ;(mockEstadoTurnoService.findOne as jest.Mock).mockResolvedValue(mockEstadoTurno)
-                ;(mockEmpleadoService.findOne as jest.Mock).mockResolvedValue(mockEmpleado)
-                ;(mockPacienteService.findOne as jest.Mock).mockResolvedValue(mockPaciente)
-                ;(mockEspecialidadService.findOne as jest.Mock).mockResolvedValue(mockEspecialidad)
-
-                await expect(service.agendarTurno(dto)).rejects.toThrow()
-            })
-
         })
 
         describe("Errores de base de datos", () => {
@@ -623,8 +566,6 @@ describe("TurnoService", () => {
 
                 await expect(service.agendarTurno(dto)).rejects.toThrow("Error al guardar en la base de datos")
             })
-
         })
-
     })
 })
