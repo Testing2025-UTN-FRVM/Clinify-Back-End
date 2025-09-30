@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TurnoService } from './turno.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { TurnoEntity } from '../../entities/turno.entity';
+import { TurnoEntity } from 'src/entities/turno.entity';
 import { DataSource, Repository } from 'typeorm';
 import { ConflictException } from '@nestjs/common';
 import { ProcedimientoService } from '../procedimiento/procedimiento.service';
@@ -9,12 +9,12 @@ import { EmpleadoService } from '../empleado/empleado.service';
 import { PacienteService } from '../paciente/paciente.service';
 import { EspecialidadService } from '../especialidad/especialidad.service';
 import { EstadoTurnoService } from '../estado-turno/estado-turno.service';
-import { CreateTurnoDTO } from '../../interfaces/create/create-turno.dto';
-import { ProcedimientoEntity } from '../../entities/procedimiento.entity';
-import { EmpleadoEntity } from '../../entities/empleado.entity';
-import { PacienteEntity } from '../../entities/paciente.entity';
-import { EspecialidadEntity } from '../../entities/especialidad.entity';
-import { EstadoTurnoEntity } from '../../entities/estadoTurno.entity';
+import { CreateTurnoDTO } from 'src/interfaces/create/create-turno.dto';
+import { ProcedimientoEntity } from 'src/entities/procedimiento.entity';
+import { EmpleadoEntity } from 'src/entities/empleado.entity';
+import { PacienteEntity } from 'src/entities/paciente.entity';
+import { EspecialidadEntity } from 'src/entities/especialidad.entity';
+import { EstadoTurnoEntity } from 'src/entities/estadoTurno.entity';
 
 // Mock de todas las dependencias del TurnoService
 const mockTurnoRepository = {
@@ -219,13 +219,13 @@ describe('TurnoService', () => {
         especialidad: 1,
         estado: 1,
       };
-      
+
       const mockProcedimiento: ProcedimientoEntity = {
         id: 1,
         nombre: 'Limpieza dental',
         duracion: 30, // 30 minutos
       } as ProcedimientoEntity;
-      
+
       (procedimientoService.findOne as jest.Mock).mockResolvedValue(mockProcedimiento);
       (mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
         const manager = {
