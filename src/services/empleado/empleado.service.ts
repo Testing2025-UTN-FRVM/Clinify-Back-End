@@ -59,16 +59,6 @@ export class EmpleadoService {
         }
     }
 
-    async findById(id: number): Promise<EmpleadoEntity> {
-        const emp = await this.empleadoRepository.findOneBy({id});
-
-        if(!emp){
-            throw new NotFoundException("No existe el empleado con el id: "+id);
-        }
-
-        return emp;
-    }
-
     async findAll(): Promise<EmpleadoEntity[]> {
         return this.empleadoRepository.find({relations: ['tipoEmpleado','especialidad','persona','user']});
     }
