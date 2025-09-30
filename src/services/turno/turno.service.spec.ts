@@ -17,6 +17,8 @@ import type { EstadoTurnoEntity } from "src/entities/estadoTurno.entity"
 import { jest } from "@jest/globals"
 import {NotFoundException} from "@nestjs/common";
 import {createMockRepository} from "../../../tests/utils/mock-repository";
+import {UserEntity} from "src/entities/user.entity";
+import {PersonaEntity} from "src/entities/persona.entity";
 
 //Crear un mock para cada servicio que se usa
 const mockTurnoRepository = createMockRepository<TurnoEntity>()
@@ -61,12 +63,36 @@ describe("TurnoService", () => {
         turnos: [],
     } as EstadoTurnoEntity
 
+    const mockUser: UserEntity = {
+        email: 'agustin@cmail.com',
+        password: '1234'
+    } as unknown as UserEntity
+
+    const mockPersonaUno: PersonaEntity = {
+        id: 1,
+        nombre: "Agustín",
+        apellido: "Liendo Ortiz",
+        fechaNacimiento: new Date('30-08-2004'),
+        tipoDocumento: 'DNI',
+        numeroDocumento: '333333333',
+        telefono: '3534220000',
+    } as unknown as PersonaEntity
+
+    const mockPersonaDos: PersonaEntity = {
+        id: 1,
+        nombre: "Manuel",
+        apellido: "Veronese",
+        fechaNacimiento: new Date('09-08-2002'),
+        tipoDocumento: 'DNI',
+        numeroDocumento: '4444444444',
+        telefono: '3534220000',
+    } as unknown as PersonaEntity
+
     const mockEmpleado: EmpleadoEntity = {
         id: 1,
-        nombre: "Dr. Juan Pérez",
         tipoEmpleado: null,
-        persona: null,
-        user: null,
+        persona: mockPersonaUno,
+        user: mockUser,
         especialidad: null,
         procedimientos: [],
         consultorio: null,
@@ -76,15 +102,14 @@ describe("TurnoService", () => {
 
     const mockPaciente: PacienteEntity = {
         id: 1,
-        nombre: "María González",
         altura: 165,
         peso: 60,
         observaciones: "Sin observaciones",
-        persona: null,
+        persona: mockPersonaDos,
         grupoSanguineo: null,
         historiasClinicas: [],
         turnos: [],
-    } as unknown as  PacienteEntity
+    } as unknown as PacienteEntity
 
     const mockEspecialidad: EspecialidadEntity = {
         id: 1,
