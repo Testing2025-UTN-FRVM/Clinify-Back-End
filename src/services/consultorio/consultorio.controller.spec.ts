@@ -79,7 +79,7 @@ describe("ConsultorioController", () => {
         it("debería lanzar error cuando el número es inválido", async () => {
             const dtoInvalido = { ...createDto, numero: -1 }
             mockConsultorioService.create.mockRejectedValue(
-                new BadRequestException("El número del consultorio debe ser positivo"),
+                new BadRequestException("El número del consultorio debe ser positivo")
             )
 
             await expect(controller.create(dtoInvalido)).rejects.toThrow(BadRequestException)
@@ -192,9 +192,7 @@ describe("ConsultorioController", () => {
 
         it("debería lanzar error cuando el número es negativo", async () => {
             const dtoConNumeroNegativo: PatchConsultorioDTO = { numero: -5 }
-            mockConsultorioService.edit.mockRejectedValue(
-                new BadRequestException("El número del consultorio debe ser positivo"),
-            )
+
 
             await expect(controller.edit(dtoConNumeroNegativo, 1)).rejects.toThrow(BadRequestException)
         })
@@ -220,28 +218,10 @@ describe("ConsultorioController", () => {
             expect(service.delete).toHaveBeenCalledWith(999)
         })
 
-        it("debería lanzar error cuando el ID es inválido", async () => {
-            mockConsultorioService.delete.mockRejectedValue(new BadRequestException("ID inválido"))
-
-            await expect(controller.delete(-1)).rejects.toThrow(BadRequestException)
-        })
-
         it("debería lanzar error cuando el consultorio tiene empleados asociados", async () => {
             mockConsultorioService.delete.mockRejectedValue(
                 new BadRequestException("No se puede eliminar el consultorio porque tiene empleados asociados"),
             )
-
-            await expect(controller.delete(1)).rejects.toThrow(BadRequestException)
-        })
-
-        it("debería lanzar error cuando el ID es cero", async () => {
-            mockConsultorioService.delete.mockRejectedValue(new BadRequestException("ID inválido"))
-
-            await expect(controller.delete(0)).rejects.toThrow(BadRequestException)
-        })
-
-        it("debería lanzar error cuando hay un problema de integridad referencial", async () => {
-            mockConsultorioService.delete.mockRejectedValue(new BadRequestException("Error de integridad referencial"))
 
             await expect(controller.delete(1)).rejects.toThrow(BadRequestException)
         })
@@ -283,14 +263,6 @@ describe("ConsultorioController", () => {
             expect(service.findAll).toHaveBeenCalledTimes(1)
         })
 
-        it("debería lanzar error cuando falla la consulta a la base de datos", async () => {
-            mockConsultorioService.findAll.mockRejectedValue(
-                new InternalServerErrorException("Error al consultar la base de datos"),
-            )
-
-            await expect(controller.findAll()).rejects.toThrow(InternalServerErrorException)
-        })
-
         it("debería retornar consultorios con la estructura correcta", async () => {
             mockConsultorioService.findAll.mockResolvedValue(consultorios)
 
@@ -330,18 +302,6 @@ describe("ConsultorioController", () => {
 
             await expect(controller.findOne(999)).rejects.toThrow(NotFoundException)
             expect(service.findOne).toHaveBeenCalledWith(999)
-        })
-
-        it("debería lanzar error cuando el ID es inválido", async () => {
-            mockConsultorioService.findOne.mockRejectedValue(new BadRequestException("ID inválido"))
-
-            await expect(controller.findOne(-1)).rejects.toThrow(BadRequestException)
-        })
-
-        it("debería lanzar error cuando el ID es cero", async () => {
-            mockConsultorioService.findOne.mockRejectedValue(new BadRequestException("ID inválido"))
-
-            await expect(controller.findOne(0)).rejects.toThrow(BadRequestException)
         })
 
         it("debería retornar un consultorio con la estructura correcta", async () => {

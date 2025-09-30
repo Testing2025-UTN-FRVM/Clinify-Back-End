@@ -1,12 +1,13 @@
 import {ObjectLiteral, Repository} from 'typeorm';
 
-export type MockRepository<T extends ObjectLiteral = any> = {
-    [P in keyof Repository<T>]: Repository<T>[P] extends (...args: any[]) => any
-        ? jest.MockedFunction<Repository<T>[P]>
-        : Repository<T>[P];
-};
+type RepoMethods =
+    | 'create' | 'save' | 'find' | 'findOne' | 'findOneBy'
+    | 'remove' | 'merge' | 'delete' | 'query';
 
-export const createMockRepository = <T extends ObjectLiteral = any>(): Partial<MockRepository<T>> => ({
+export type MockRepository<T extends ObjectLiteral = any> =
+    jest.Mocked<Pick<Repository<T>, RepoMethods>>;
+
+export const createMockRepository = <T extends ObjectLiteral = any>(): MockRepository<T> => ({
     create: jest.fn(),
     save: jest.fn(),
     find: jest.fn(),
@@ -16,4 +17,4 @@ export const createMockRepository = <T extends ObjectLiteral = any>(): Partial<M
     merge: jest.fn(),
     delete: jest.fn(),
     query: jest.fn(),
-});
+} as unknown as MockRepository<T>);
