@@ -1,8 +1,8 @@
 import {ConflictException, Injectable} from '@nestjs/common';
 import {InjectDataSource, InjectRepository} from "@nestjs/typeorm";
-import {TurnoEntity} from "../../entities/turno.entity";
+import {TurnoEntity} from "src/entities/turno.entity";
 import {DataSource, Repository} from "typeorm";
-import {CreateTurnoDTO} from "../../interfaces/create/create-turno.dto";
+import {CreateTurnoDTO} from "src/interfaces/create/create-turno.dto";
 import {ProcedimientoService} from "../procedimiento/procedimiento.service";
 import {EmpleadoService} from "../empleado/empleado.service";
 import {PacienteService} from "../paciente/paciente.service";
@@ -67,7 +67,7 @@ export class TurnoService {
                     motivo: dto.motivo,
                     procedimiento,
                     estado: await this.estadoTurnoService.findOne(1),
-                    doctor: await this.empleadoService.findById(dto.doctor),
+                    doctor: await this.empleadoService.findOne(dto.doctor),
                     paciente: await this.pacienteService.findOne(dto.paciente),
                     especialidad: await this.especialidadService.findOne(dto.especialidad)
 
