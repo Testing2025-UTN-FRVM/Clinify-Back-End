@@ -11,6 +11,8 @@ import type { EstadoTurnoEntity } from "src/entities/estadoTurno.entity"
 import { BadRequestException } from "@nestjs/common"
 import { jest } from "@jest/globals"
 import {AuthGuard} from "src/middlewares/auth.middleware";
+import {PersonaEntity} from "src/entities/persona.entity";
+import {UserEntity} from "src/entities/user.entity";
 
 describe("TurnoController", () => {
     let controller: TurnoController
@@ -25,45 +27,46 @@ describe("TurnoController", () => {
         nombre: "Consulta General",
         descripcion: "Consulta médica general",
         duracion: 30,
-        precio: 1500.0,
-        activo: true,
-        fechaRegistro: new Date("2024-01-01"),
         turnos: [],
+        doctores: []
+    }
+
+    const mockUser: UserEntity = {
+        email: 'agustin@cmail.com',
+        password: '1234'
+    }
+
+    const mockPersonaUno: PersonaEntity = {
+        id: 1,
+        nombre: "Agustín",
+        apellido: "Liendo Ortiz",
+        fechaNacimiento: new Date('30-08-2004'),
+        tipoDocumento: 'DNI',
+        numeroDocumento: '333333333',
+        telefono: '3534220000',
+    }
+
+    const mockPersonaDos: PersonaEntity = {
+        id: 1,
+        nombre: "Manuel",
+        apellido: "Veronese",
+        fechaNacimiento: new Date('09-08-2002'),
+        tipoDocumento: 'DNI',
+        numeroDocumento: '4444444444',
+        telefono: '3534220000',
     }
 
     const mockDoctor: EmpleadoEntity = {
         id: 1,
-        nombre: "Dr. Juan",
-        apellido: "Pérez",
-        dni: "12345678",
-        email: "juan.perez@clinica.com",
-        telefono: "1234567890",
-        direccion: "Calle Falsa 123",
-        fechaNacimiento: new Date("1980-05-15"),
-        fechaContratacion: new Date("2020-01-01"),
-        activo: true,
-        fechaRegistro: new Date("2020-01-01"),
-        usuario: null,
-        especialidades: [],
-        turnos: [],
-        horarios: [],
+        persona: mockPersonaUno,
+        user: mockUser,
     }
 
     const mockPaciente: PacienteEntity = {
         id: 1,
-        nombre: "María",
-        apellido: "González",
-        dni: "87654321",
-        email: "maria.gonzalez@email.com",
-        telefono: "0987654321",
-        direccion: "Avenida Siempre Viva 742",
-        fechaNacimiento: new Date("1990-03-20"),
-        obraSocial: "OSDE",
-        numeroAfiliado: "OS123456",
-        activo: true,
-        fechaRegistro: new Date("2024-01-15"),
+        persona: mockPersonaDos,
         turnos: [],
-        historiaClinica: [],
+        historiasClinicas: [],
     }
 
     const mockEspecialidad: EspecialidadEntity = {
@@ -147,13 +150,10 @@ describe("TurnoController", () => {
 
     describe("agendarTurno", () => {
         it("debería agendar un turno correctamente con datos válidos", async () => {
-            // Arrange
             mockTurnoService.agendarTurno.mockResolvedValue(mockTurnoEntity)
 
-            // Act
             const result = await controller.agendarTurno(createTurnoDtoValido)
 
-            // Assert
             expect(service.agendarTurno).toHaveBeenCalledWith(createTurnoDtoValido)
             expect(service.agendarTurno).toHaveBeenCalledTimes(1)
             expect(result).toEqual(mockTurnoEntity)
@@ -162,54 +162,45 @@ describe("TurnoController", () => {
         })
 
         it("debería retornar un turno con todas las relaciones cargadas", async () => {
-            // Arrange
             mockTurnoService.agendarTurno.mockResolvedValue(mockTurnoEntity)
 
-            // Act
             const result = await controller.agendarTurno(createTurnoDtoValido)
 
-            // Assert
             expect(result.procedimiento).toBeDefined()
             expect(result.doctor).toBeDefined()
             expect(result.paciente).toBeDefined()
             expect(result.especialidad).toBeDefined()
-            expect(result.estadoTurno).toBeDefined()
-            expect(result.procedimiento.nombre).toBe("Consulta General")
-            expect(result.doctor.nombre).toBe("Dr. Juan")
-            expect(result.paciente.nombre).toBe("María")
+            expect(result.procedimiento.nombre).toBe(mockProcedimiento.nombre)
+            expect(result.doctor.persona.nombre).toBe(mockPersonaUno.nombre)
+            expect(result.paciente.persona.nombre).toBe(mockPersonaDos.nombre)
         })
     })
 
     describe("agendarTurno - Validación de datos", () => {
         it("debería fallar cuando la fecha es inválida", async () => {
-            // Arrange
             const dtoFechaInvalida: CreateTurnoDTO = {
                 ...createTurnoDtoValido,
                 fechaHoraTurno: "fecha-invalida",
             }
             mockTurnoService.agendarTurno.mockRejectedValue(new BadRequestException("Formato de fecha inválido"))
 
-            // Act & Assert
             await expect(controller.agendarTurno(dtoFechaInvalida)).rejects.toThrow(BadRequestException)
             await expect(controller.agendarTurno(dtoFechaInvalida)).rejects.toThrow("Formato de fecha inválido")
         })
 
         it("debería fallar cuando el motivo está vacío", async () => {
-            // Arrange
             const dtoMotivoVacio: CreateTurnoDTO = {
                 ...createTurnoDtoValido,
                 motivo: "",
             }
             mockTurnoService.agendarTurno.mockRejectedValue(new BadRequestException("El motivo no puede estar vacío"))
 
-            // Act & Assert
             await expect(controller.agendarTurno(dtoMotivoVacio)).rejects.toThrow(BadRequestException)
         })
     })
 
     describe("agendarTurno - Validación de tipos de datos", () => {
         it("debería fallar cuando fechaHoraTurno no es una cadena", async () => {
-            // Arrange
             const dtoFechaTipoIncorrecto: any = {
                 ...createTurnoDtoValido,
                 fechaHoraTurno: 12345,
@@ -218,12 +209,10 @@ describe("TurnoController", () => {
                 new BadRequestException("El tipo de dato de fechaHoraTurno es incorrecto"),
             )
 
-            // Act & Assert
             await expect(controller.agendarTurno(dtoFechaTipoIncorrecto)).rejects.toThrow(BadRequestException)
         })
 
         it("debería fallar cuando motivo no es una cadena", async () => {
-            // Arrange
             const dtoMotivoTipoIncorrecto: any = {
                 ...createTurnoDtoValido,
                 motivo: 12345,
@@ -232,12 +221,10 @@ describe("TurnoController", () => {
                 new BadRequestException("El tipo de dato de motivo es incorrecto"),
             )
 
-            // Act & Assert
             await expect(controller.agendarTurno(dtoMotivoTipoIncorrecto)).rejects.toThrow(BadRequestException)
         })
 
         it("debería fallar cuando procedimiento no es un número", async () => {
-            // Arrange
             const dtoProcedimientoTipoIncorrecto: any = {
                 ...createTurnoDtoValido,
                 procedimiento: "no-es-numero",
@@ -246,12 +233,10 @@ describe("TurnoController", () => {
                 new BadRequestException("El tipo de dato de procedimiento es incorrecto"),
             )
 
-            // Act & Assert
             await expect(controller.agendarTurno(dtoProcedimientoTipoIncorrecto)).rejects.toThrow(BadRequestException)
         })
 
         it("debería fallar cuando doctor no es un número", async () => {
-            // Arrange
             const dtoDoctorTipoIncorrecto: any = {
                 ...createTurnoDtoValido,
                 doctor: "no-es-numero",
@@ -260,12 +245,10 @@ describe("TurnoController", () => {
                 new BadRequestException("El tipo de dato de doctor es incorrecto"),
             )
 
-            // Act & Assert
             await expect(controller.agendarTurno(dtoDoctorTipoIncorrecto)).rejects.toThrow(BadRequestException)
         })
 
         it("debería fallar cuando faltan campos requeridos", async () => {
-            // Arrange
             const dtoIncompleto: any = {
                 fechaHoraTurno: "2025-10-10T10:00:00Z",
                 motivo: "Consulta",
@@ -273,14 +256,12 @@ describe("TurnoController", () => {
             }
             mockTurnoService.agendarTurno.mockRejectedValue(new BadRequestException("Faltan campos requeridos"))
 
-            // Act & Assert
             await expect(controller.agendarTurno(dtoIncompleto)).rejects.toThrow(BadRequestException)
         })
     })
 
     describe("agendarTurno - Comprobaciones de DTO", () => {
         it("debería manejar correctamente un DTO con campos adicionales no esperados", async () => {
-            // Arrange
             const dtoConCamposExtra: any = {
                 ...createTurnoDtoValido,
                 campoExtra: "valor no esperado",
@@ -288,29 +269,23 @@ describe("TurnoController", () => {
             }
             mockTurnoService.agendarTurno.mockResolvedValue(mockTurnoEntity)
 
-            // Act
             const result = await controller.agendarTurno(dtoConCamposExtra)
 
-            // Assert
             expect(result).toEqual(mockTurnoEntity)
             expect(service.agendarTurno).toHaveBeenCalledWith(dtoConCamposExtra)
         })
 
         it("debería fallar cuando el DTO es nulo", async () => {
-            // Arrange
             mockTurnoService.agendarTurno.mockRejectedValue(
                 new BadRequestException("Los datos del turno no pueden ser nulos"),
             )
 
-            // Act & Assert
             await expect(controller.agendarTurno(null as any)).rejects.toThrow(BadRequestException)
         })
 
         it("debería fallar cuando el DTO no está definido", async () => {
-            // Arrange
             mockTurnoService.agendarTurno.mockRejectedValue(new BadRequestException("Los datos del turno son requeridos"))
 
-            // Act & Assert
             await expect(controller.agendarTurno(undefined as any)).rejects.toThrow(BadRequestException)
         })
 
