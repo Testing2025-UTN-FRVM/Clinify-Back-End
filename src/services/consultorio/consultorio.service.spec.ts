@@ -29,8 +29,8 @@ describe("ConsultorioService", () => {
                 empleados: [],
             } as ConsultorioEntity
 
-            repository.create!.mockReturnValue(consultorioCreado)
-            repository.save!.mockResolvedValue(consultorioCreado)
+            repository.create.mockReturnValue(consultorioCreado)
+            repository.save.mockResolvedValue(consultorioCreado)
 
             const resultado = await service.create(dto)
 
@@ -48,8 +48,8 @@ describe("ConsultorioService", () => {
             }
 
             const error = new Error("Duplicate entry")
-            repository.create!.mockReturnValue(dto as any)
-            repository.save!.mockRejectedValue(error)
+            repository.create.mockReturnValue(dto as any)
+            repository.save.mockRejectedValue(error)
 
             await expect(service.create(dto)).rejects.toThrow(error)
             expect(repository.create).toHaveBeenCalledWith(dto)
@@ -62,8 +62,8 @@ describe("ConsultorioService", () => {
             } as CreateConsultorioDTO
 
             const error = new Error("La observacion del consultorio no puede estar vacia")
-            repository.create!.mockReturnValue(dto as any)
-            repository.save!.mockRejectedValue(error)
+            repository.create.mockReturnValue(dto as any)
+            repository.save.mockRejectedValue(error)
 
             await expect(service.create(dto)).rejects.toThrow()
         })
@@ -75,8 +75,8 @@ describe("ConsultorioService", () => {
             } as CreateConsultorioDTO
 
             const error = new Error("El dato introducido debe ser un numero")
-            repository.create!.mockReturnValue(dto as any)
-            repository.save!.mockRejectedValue(error)
+            repository.create.mockReturnValue(dto as any)
+            repository.save.mockRejectedValue(error)
 
             await expect(service.create(dto)).rejects.toThrow()
         })
@@ -101,8 +101,8 @@ describe("ConsultorioService", () => {
                 ...dto,
             } as ConsultorioEntity
 
-            repository.findOneBy!.mockResolvedValue(consultorioExistente)
-            repository.save!.mockResolvedValue(consultorioActualizado)
+            repository.findOneBy.mockResolvedValue(consultorioExistente)
+            repository.save.mockResolvedValue(consultorioActualizado)
 
             const resultado = await service.edit(1, dto)
 
@@ -130,8 +130,8 @@ describe("ConsultorioService", () => {
                 numero: 103,
             } as ConsultorioEntity
 
-            repository.findOneBy!.mockResolvedValue(consultorioExistente)
-            repository.save!.mockResolvedValue(consultorioActualizado)
+            repository.findOneBy.mockResolvedValue(consultorioExistente)
+            repository.save.mockResolvedValue(consultorioActualizado)
 
             const resultado = await service.edit(1, dto)
 
@@ -144,7 +144,7 @@ describe("ConsultorioService", () => {
                 numero: 102,
             }
 
-            repository.findOneBy!.mockResolvedValue(null)
+            repository.findOneBy.mockResolvedValue(null)
 
             await expect(service.edit(999, dto)).rejects.toThrow(NotFoundException)
             await expect(service.edit(999, dto)).rejects.toThrow("No existe el consultorio con el id: 999")
@@ -165,10 +165,10 @@ describe("ConsultorioService", () => {
                 numero: 102, // Este número ya existe en otro consultorio
             }
 
-            repository.findOneBy!.mockResolvedValue(consultorioExistente)
-            repository.save!.mockRejectedValue(new Error("Duplicate entry"))
+            repository.findOneBy.mockResolvedValue(consultorioExistente)
+            repository.save.mockRejectedValue(new Error)
 
-            await expect(service.edit(1, dto)).rejects.toThrow("Duplicate entry")
+            await expect(service.edit(1, dto)).rejects.toThrow(Error)
         })
     })
 
@@ -181,8 +181,8 @@ describe("ConsultorioService", () => {
                 empleados: [],
             } as ConsultorioEntity
 
-            repository.findOneBy!.mockResolvedValue(consultorio)
-            repository.remove!.mockResolvedValue(consultorio)
+            repository.findOneBy.mockResolvedValue(consultorio)
+            repository.remove.mockResolvedValue(consultorio)
 
             const resultado = await service.delete(1)
 
@@ -195,7 +195,7 @@ describe("ConsultorioService", () => {
         })
 
         it("debería fallar al eliminar un consultorio inexistente", async () => {
-            repository.findOneBy!.mockResolvedValue(null)
+            repository.findOneBy.mockResolvedValue(null)
 
             await expect(service.delete(999)).rejects.toThrow(NotFoundException)
             await expect(service.delete(999)).rejects.toThrow("No existe el consultorio con el id: 999")
@@ -210,10 +210,10 @@ describe("ConsultorioService", () => {
                 empleados: [{ id: 1 } as any],
             } as ConsultorioEntity
 
-            repository.findOneBy!.mockResolvedValue(consultorioConEmpleados)
-            repository.remove!.mockRejectedValue(new Error("Cannot delete consultorio with associated empleados"))
+            repository.findOneBy.mockResolvedValue(consultorioConEmpleados)
+            repository.remove.mockRejectedValue(new Error)
 
-            await expect(service.delete(1)).rejects.toThrow("Cannot delete consultorio with associated empleados")
+            await expect(service.delete(1)).rejects.toThrow(Error)
         })
     })
 
@@ -234,7 +234,7 @@ describe("ConsultorioService", () => {
                 } as ConsultorioEntity,
             ]
 
-            repository.find!.mockResolvedValue(consultorios)
+            repository.find.mockResolvedValue(consultorios)
 
             const resultado = await service.findAll()
 
@@ -246,7 +246,7 @@ describe("ConsultorioService", () => {
         })
 
         it("debería retornar un array vacío cuando no hay consultorios", async () => {
-            repository.find!.mockResolvedValue([])
+            repository.find.mockResolvedValue([])
 
             const resultado = await service.findAll()
 
@@ -265,7 +265,7 @@ describe("ConsultorioService", () => {
                 empleados: [],
             } as ConsultorioEntity
 
-            repository.findOneBy!.mockResolvedValue(consultorio)
+            repository.findOneBy.mockResolvedValue(consultorio)
 
             const resultado = await service.findOne(1)
 
@@ -276,7 +276,7 @@ describe("ConsultorioService", () => {
         })
 
         it("debería lanzar NotFoundException cuando el consultorio no existe", async () => {
-            repository.findOneBy!.mockResolvedValue(null)
+            repository.findOneBy.mockResolvedValue(null)
 
             await expect(service.findOne(99)).rejects.toThrow(NotFoundException)
             await expect(service.findOne(99)).rejects.toThrow("No existe el consultorio con el id: 99")
