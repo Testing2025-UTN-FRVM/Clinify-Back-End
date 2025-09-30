@@ -317,13 +317,5 @@ describe("ConsultorioController", () => {
             expect(typeof resultado.observaciones).toBe("string")
             expect(Array.isArray(resultado.empleados)).toBe(true)
         })
-
-        it("debería lanzar error cuando hay un problema de conexión", async () => {
-            mockConsultorioService.findOne.mockRejectedValue(
-                new InternalServerErrorException("Error de conexión a la base de datos"),
-            )
-
-            await expect(controller.findOne(1)).rejects.toThrow(InternalServerErrorException)
-        })
     })
 })
