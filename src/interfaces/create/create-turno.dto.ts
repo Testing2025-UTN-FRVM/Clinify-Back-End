@@ -1,7 +1,7 @@
 import {IsDateString, IsNotEmpty, IsNumber, IsString} from "class-validator";
 
 export class CreateTurnoDTO {
-    @IsDateString()
+    @IsDateString({},{message: "FechaHora invalida"})
     @IsNotEmpty()
     fechaHoraTurno: string;
 
