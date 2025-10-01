@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { UserEntity } from 'src/entities/user.entity';
 jest.mock('bcrypt');
 import * as bcrypt from 'bcrypt';
+import {RolesService} from "src/services/roles/roles.service";
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -21,7 +22,7 @@ describe('UsersService', () => {
       refreshToken: jest.fn(),
     };
 
-    service = new UsersService(repo as any, jwtService as any);
+    service = new UsersService(repo as any, jwtService as any, RolesService as any);
   });
 
   afterEach(() => {
@@ -73,7 +74,7 @@ describe('UsersService', () => {
     expect(jwtService.generateToken).toHaveBeenCalledTimes(2);
   });
 
-  it('login should throw UnauthorizedException when user not found', async () => {
+  it('login should throw NotFoundException when user not found', async () => {
     const body = { email: 'no@one.com', password: 'x' };
     repo.findOne.mockResolvedValue(null);
 
