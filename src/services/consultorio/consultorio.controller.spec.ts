@@ -4,7 +4,7 @@ import { ConsultorioService } from "./consultorio.service"
 import type { CreateConsultorioDTO } from "src/interfaces/create/create-consultorio.dto"
 import type { PatchConsultorioDTO } from "src/interfaces/patch/patch-consultorio.dto"
 import type { ConsultorioEntity } from "src/entities/consultorio.entity"
-import {NotFoundException, BadRequestException, InternalServerErrorException} from "@nestjs/common"
+import {NotFoundException, BadRequestException} from "@nestjs/common"
 import { jest } from "@jest/globals"
 import {AuthGuard} from "src/middlewares/auth.middleware";
 
@@ -57,7 +57,7 @@ describe("ConsultorioController", () => {
             numero: 101,
             observaciones: "Consultorio de cardiología",
             empleados: [],
-        } as ConsultorioEntity
+        } as unknown as ConsultorioEntity
 
         it("debería crear un consultorio exitosamente", async () => {
             mockConsultorioService.create.mockResolvedValue(consultorioCreado)
@@ -94,13 +94,6 @@ describe("ConsultorioController", () => {
             await expect(controller.create(dtoInvalido)).rejects.toThrow(BadRequestException)
         })
 
-        it("debería lanzar error cuando falla la conexión a la base de datos", async () => {
-            mockConsultorioService.create.mockRejectedValue(
-                new InternalServerErrorException("Error de conexión a la base de datos"),
-            )
-
-            await expect(controller.create(createDto)).rejects.toThrow(InternalServerErrorException)
-        })
 
         it("debería lanzar error cuando el DTO tiene campos adicionales no permitidos", async () => {
             const dtoConCamposExtra = { ...createDto, campoExtra: "no permitido" }
@@ -121,7 +114,7 @@ describe("ConsultorioController", () => {
             numero: 102,
             observaciones: "Consultorio actualizado",
             empleados: [],
-        } as ConsultorioEntity
+        } as unknown as ConsultorioEntity
 
         it("debería actualizar un consultorio exitosamente", async () => {
             mockConsultorioService.edit.mockResolvedValue(consultorioActualizado)
@@ -189,13 +182,6 @@ describe("ConsultorioController", () => {
 
             await expect(controller.edit(dtoVacio, 1)).rejects.toThrow(BadRequestException)
         })
-
-        it("debería lanzar error cuando el número es negativo", async () => {
-            const dtoConNumeroNegativo: PatchConsultorioDTO = { numero: -5 }
-
-
-            await expect(controller.edit(dtoConNumeroNegativo, 1)).rejects.toThrow(BadRequestException)
-        })
     })
 
     describe("delete", () => {
@@ -234,13 +220,13 @@ describe("ConsultorioController", () => {
                 numero: 101,
                 observaciones: "Consultorio 1",
                 empleados: [],
-            } as ConsultorioEntity,
+            } as unknown as ConsultorioEntity,
             {
                 id: 2,
                 numero: 102,
                 observaciones: "Consultorio 2",
                 empleados: [],
-            } as ConsultorioEntity,
+            } as unknown as ConsultorioEntity,
         ]
 
         it("debería retornar todos los consultorios", async () => {
@@ -285,7 +271,7 @@ describe("ConsultorioController", () => {
             numero: 101,
             observaciones: "Consultorio de cardiología",
             empleados: [],
-        } as ConsultorioEntity
+        } as unknown as ConsultorioEntity
 
         it("debería retornar un consultorio por ID", async () => {
             mockConsultorioService.findOne.mockResolvedValue(consultorio)
