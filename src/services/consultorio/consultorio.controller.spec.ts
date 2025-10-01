@@ -13,15 +13,17 @@ describe("ConsultorioController", () => {
     let service: ConsultorioService
 
     const mockConsultorioService = {
-        create: jest.fn(),
-        edit: jest.fn(),
-        delete: jest.fn(),
-        findAll: jest.fn(),
-        findOne: jest.fn(),
+        create: jest.fn<() => Promise<ConsultorioEntity>>(),
+        edit: jest.fn<() => Promise<ConsultorioEntity>>(),
+        delete: jest.fn<() => Promise<any>>(),
+        findAll: jest.fn<() => Promise<ConsultorioEntity[]>>(),
+        findOne: jest.fn<() => Promise<ConsultorioEntity>>(),
     }
 
     beforeEach(async () => {
-        const guard = {canActivate: jest.fn().mockResolvedValue(true)}
+        const guard = {
+            canActivate: jest.fn<() => Promise<boolean>>().mockResolvedValue(true)
+        };
         const module: TestingModule = await Test.createTestingModule({
             controllers: [ConsultorioController],
             providers: [
@@ -130,7 +132,7 @@ describe("ConsultorioController", () => {
             const patchDtoSoloNumero: PatchConsultorioDTO = { numero: 103 }
             const consultorioConNumeroActualizado = { ...consultorioActualizado, numero: 103 }
 
-            mockConsultorioService.edit.mockResolvedValue(consultorioConNumeroActualizado)
+            mockConsultorioService.edit.mockResolvedValue(consultorioConNumeroActualizado as any)
 
             const resultado = await controller.edit(patchDtoSoloNumero, 1)
 
@@ -147,7 +149,7 @@ describe("ConsultorioController", () => {
                 observaciones: "Nueva observación",
             }
 
-            mockConsultorioService.edit.mockResolvedValue(consultorioConObservacionesActualizadas)
+            mockConsultorioService.edit.mockResolvedValue(consultorioConObservacionesActualizadas as any)
 
             const resultado = await controller.edit(patchDtoSoloObservaciones, 1)
 

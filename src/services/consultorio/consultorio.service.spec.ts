@@ -27,7 +27,7 @@ describe("ConsultorioService", () => {
                 numero: 101,
                 observaciones: "Consultorio de Pediatría",
                 empleados: [],
-            } as ConsultorioEntity
+            } as unknown as ConsultorioEntity
 
             repository.create.mockReturnValue(consultorioCreado)
             repository.save.mockResolvedValue(consultorioCreado)
@@ -89,7 +89,7 @@ describe("ConsultorioService", () => {
                 numero: 101,
                 observaciones: "Consultorio de Pediatría",
                 empleados: [],
-            } as ConsultorioEntity
+            } as unknown as ConsultorioEntity
 
             const dto: PatchConsultorioDTO = {
                 numero: 102,
@@ -119,7 +119,7 @@ describe("ConsultorioService", () => {
                 numero: 101,
                 observaciones: "Consultorio de Pediatría",
                 empleados: [],
-            } as ConsultorioEntity
+            } as unknown as ConsultorioEntity
 
             const dto: PatchConsultorioDTO = {
                 numero: 103,
@@ -159,7 +159,7 @@ describe("ConsultorioService", () => {
                 numero: 101,
                 observaciones: "Consultorio de Pediatría",
                 empleados: [],
-            } as ConsultorioEntity
+            } as unknown as ConsultorioEntity
 
             const dto: PatchConsultorioDTO = {
                 numero: 102, // Este número ya existe en otro consultorio
@@ -179,7 +179,7 @@ describe("ConsultorioService", () => {
                 numero: 101,
                 observaciones: "Consultorio de Pediatría",
                 empleados: [],
-            } as ConsultorioEntity
+            } as unknown as ConsultorioEntity
 
             repository.findOneBy.mockResolvedValue(consultorio)
             repository.remove.mockResolvedValue(consultorio)
@@ -225,13 +225,13 @@ describe("ConsultorioService", () => {
                     numero: 101,
                     observaciones: "Consultorio de Pediatría",
                     empleados: [],
-                } as ConsultorioEntity,
+                } as unknown as ConsultorioEntity,
                 {
                     id: 2,
                     numero: 102,
                     observaciones: "Consultorio de Cardiología",
                     empleados: [],
-                } as ConsultorioEntity,
+                } as unknown as ConsultorioEntity,
             ]
 
             repository.find.mockResolvedValue(consultorios)
@@ -263,7 +263,7 @@ describe("ConsultorioService", () => {
                 numero: 101,
                 observaciones: "Consultorio de Pediatría",
                 empleados: [],
-            } as ConsultorioEntity
+            } as unknown as ConsultorioEntity
 
             repository.findOneBy.mockResolvedValue(consultorio)
 
