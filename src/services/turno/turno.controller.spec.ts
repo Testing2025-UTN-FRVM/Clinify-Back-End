@@ -19,7 +19,7 @@ describe("TurnoController", () => {
     let service: TurnoService
 
     const mockTurnoService = {
-        agendarTurno: jest.fn(),
+        agendarTurno: jest.fn<() => Promise<TurnoEntity>>(),
     }
 
     const mockProcedimiento: ProcedimientoEntity = {
@@ -117,7 +117,7 @@ describe("TurnoController", () => {
     } as unknown as TurnoEntity
 
     beforeEach(async () => {
-        const guard = {canActivate: jest.fn().mockResolvedValue(true)}
+        const guard = {canActivate: jest.fn<() => Promise<boolean>>().mockResolvedValue(true)}
         const module: TestingModule = await Test.createTestingModule({
             controllers: [TurnoController],
             providers: [

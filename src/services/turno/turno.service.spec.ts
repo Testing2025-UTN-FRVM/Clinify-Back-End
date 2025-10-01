@@ -2,7 +2,7 @@ import { Test, type TestingModule } from "@nestjs/testing"
 import { TurnoService } from "./turno.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { TurnoEntity } from "src/entities/turno.entity"
-import { DataSource, type Repository } from "typeorm"
+import {DataSource, type Repository } from "typeorm"
 import { ProcedimientoService } from "../procedimiento/procedimiento.service"
 import { EmpleadoService } from "../empleado/empleado.service"
 import { PacienteService } from "../paciente/paciente.service"
@@ -34,8 +34,8 @@ const mockPacienteService = createMockRepository<PacienteEntity>()
 const mockEspecialidadService = createMockRepository<EspecialidadEntity>()
 
 const mockDataSource = {
-    transaction: jest.fn(),
-    query: jest.fn(),
+    transaction: jest.fn<() => Promise<any>>(),
+    query: jest.fn<() => Promise<any>>(),
 }
 
 describe("TurnoService", () => {
@@ -198,10 +198,10 @@ describe("TurnoService", () => {
                         paciente: mockPaciente,
                         especialidad: mockEspecialidad,
                     } as TurnoEntity
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
                         query: jest
-                            .fn()
+                            .fn<() => Promise<any>>()
                             .mockResolvedValueOnce(undefined) // pg_advisory_xact_lock
                             .mockResolvedValueOnce([]), // No solapamiento
                         getRepository: jest.fn(() => mockTurnoRepository),
@@ -243,9 +243,9 @@ describe("TurnoService", () => {
                         ...mockProcedimiento,
                         duracion: 60, // 60 minutos
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
-                        query: jest.fn().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
+                        query: jest.fn<() => Promise<any>>().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
                         getRepository: jest.fn(() => mockTurnoRepository),
                     }
                     return await callback(manager)
@@ -275,7 +275,7 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
                         query: jest.fn(),
                         getRepository: jest.fn(() => mockTurnoRepository),
@@ -296,7 +296,7 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
                         query: jest.fn(),
                         getRepository: jest.fn(() => mockTurnoRepository),
@@ -317,7 +317,7 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
                         query: jest.fn(),
                         getRepository: jest.fn(() => mockTurnoRepository),
@@ -338,7 +338,7 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
                         query: jest.fn(),
                         getRepository: jest.fn(() => mockTurnoRepository),
@@ -361,10 +361,10 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
                         query: jest
-                            .fn()
+                            .fn<() => Promise<any>>()
                             .mockResolvedValueOnce(undefined) // pg_advisory_xact_lock
                             .mockResolvedValueOnce([{ "1": 1 }]), // Hay solapamiento
                         getRepository: jest.fn(() => mockTurnoRepository),
@@ -387,10 +387,10 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
                         query: jest
-                            .fn()
+                            .fn<() => Promise<any>>()
                             .mockResolvedValueOnce(undefined)
                             .mockResolvedValueOnce([{ "1": 1 }]),
                         getRepository: jest.fn(() => mockTurnoRepository),
@@ -412,10 +412,10 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
                         query: jest
-                            .fn()
+                            .fn<() => Promise<any>>()
                             .mockResolvedValueOnce(undefined)
                             .mockResolvedValueOnce([{ "1": 1 }]),
                         getRepository: jest.fn(() => mockTurnoRepository),
@@ -439,9 +439,9 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
-                        query: jest.fn().mockResolvedValueOnce(undefined),
+                        query: jest.fn<() => Promise<any>>().mockResolvedValueOnce(undefined),
                         getRepository: jest.fn(() => mockTurnoRepository),
                     }
                     return await callback(manager)
@@ -460,9 +460,9 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
-                        query: jest.fn().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
+                        query: jest.fn<() => Promise<any>>().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
                         getRepository: jest.fn(() => mockTurnoRepository),
                     }
                     return await callback(manager)
@@ -484,9 +484,9 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
-                        query: jest.fn().mockResolvedValueOnce().mockResolvedValueOnce([]),
+                        query: jest.fn<() => Promise<any>>().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
                         getRepository: jest.fn(() => mockTurnoRepository),
                     }
                     return await callback(manager)
@@ -509,9 +509,9 @@ describe("TurnoService", () => {
                         especialidad: 999,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
-                        query: jest.fn().mockResolvedValueOnce().mockResolvedValueOnce([]),
+                        query: jest.fn<() => Promise<any>>().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
                         getRepository: jest.fn(() => mockTurnoRepository),
                     }
                     return await callback(manager)
@@ -537,7 +537,7 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockRejectedValue(new Error("Error de conexión a la base de datos"))
+                ;(mockDataSource.transaction).mockRejectedValue(new Error("Error de conexión a la base de datos"))
 
                 await expect(service.agendarTurno(dto)).rejects.toThrow("Error de conexión a la base de datos")
             })
@@ -552,12 +552,12 @@ describe("TurnoService", () => {
                         especialidad: 1,
                         estado: 1,
                     }
-                ;(mockDataSource.transaction as jest.Mock).mockImplementation(async (mode, callback) => {
+                ;(mockDataSource.transaction as jest.Mock<any>).mockImplementation(async (mode, callback) => {
                     const manager = {
-                        query: jest.fn().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
+                        query: jest.fn<() => Promise<any>>().mockResolvedValueOnce(undefined).mockResolvedValueOnce([]),
                         getRepository: jest.fn(() => ({
                             ...mockTurnoRepository,
-                            save: jest.fn().mockRejectedValue(new Error("Error al guardar en la base de datos")),
+                            save: jest.fn<() => Promise<Error>>().mockRejectedValue(new Error("Error al guardar en la base de datos")),
                         })),
                     }
                     return await callback(manager)
