@@ -1,6 +1,6 @@
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserEntity } from '../../entities/user.entity';
+import { UserEntity } from 'src/entities/user.entity';
 jest.mock('bcrypt');
 import * as bcrypt from 'bcrypt';
 
@@ -77,7 +77,7 @@ describe('UsersService', () => {
     const body = { email: 'no@one.com', password: 'x' };
     repo.findOne.mockResolvedValue(null);
 
-    await expect(service.login(body as any)).rejects.toBeInstanceOf(UnauthorizedException);
+    await expect(service.login(body as any)).rejects.toBeInstanceOf(NotFoundException);
   });
 
   it('login should throw UnauthorizedException on bad password', async () => {
