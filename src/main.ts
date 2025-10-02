@@ -2,8 +2,11 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {useContainer} from "class-validator";
 import {ValidationPipe} from "@nestjs/common";
+import reflectMetadata from "reflect-metadata";
+import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 
 async function bootstrap() {
+    //Logs
     const app = await NestFactory.create(AppModule, {bufferLogs: true});
 
     useContainer(app.select(AppModule), { fallbackOnErrors: true }); // <—
@@ -16,6 +19,7 @@ async function bootstrap() {
             },
     }));
 
+    //Cors
     app.enableCors({
         origin: [
             'http://localhost:4200'
@@ -23,6 +27,18 @@ async function bootstrap() {
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true
     });
+
+    //Swagger
+    const config = new DocumentBuilder()
+        .setTitle('Clinify API')
+        .setDescription('Documentación de la API de Clinify')
+        .setVersion('1.0')
+        .addBearerAuth() // para JWT
+        .build();
+
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, document);
+
 
     await app.listen(process.env.PORT ?? 3001);
 
