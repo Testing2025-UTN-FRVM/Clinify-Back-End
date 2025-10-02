@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {useContainer} from "class-validator";
 import {ValidationPipe} from "@nestjs/common";
-import reflectMetadata from "reflect-metadata";
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 
 async function bootstrap() {
