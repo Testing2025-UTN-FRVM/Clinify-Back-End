@@ -6,19 +6,19 @@ export class PatchTipoEmpleadoDTO {
     idTipoEmpleado: number;
 }
 
-export class PatchEspecialidadDTO {
+export class PatchEspecialidadEmpleadoDTO {
     @IsNumber()
     @IsNotEmpty()
     idEspecialidad: number;
 }
 
-export class PatchConsultorioDTO {
+export class PatchConsultorioEmpleadoDTO {
     @IsNumber()
     @IsNotEmpty()
     idConsultorio: number;
 }
 
-export class AssignProcedimientosDTO {
+export class AssignProcedimientosEmpleadoDTO {
     @IsNumber({},{each: true})
     @IsNotEmpty()
     @IsArray()
