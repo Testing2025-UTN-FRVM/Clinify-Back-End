@@ -39,6 +39,8 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);
 
+    app.getHttpAdapter().get('/docs-json', (_, res) => res.json(document));
+
 
     await app.listen(process.env.PORT ?? 3001);
 
