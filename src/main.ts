@@ -33,7 +33,7 @@ async function bootstrap() {
         .setTitle('Clinify API')
         .setDescription('Documentación de la API de Clinify')
         .setVersion('1.0')
-        .addBearerAuth() // para JWT
+        .addBearerAuth()
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
