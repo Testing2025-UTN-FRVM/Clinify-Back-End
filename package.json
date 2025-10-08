@@ -18,6 +18,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+  "test:integration:up": "docker compose -f docker-compose.test.yml up -d --wait",
+  "test:integration:down": "docker compose -f docker-compose.test.yml down -v",
+  "test:integration": "npm run test:integration:up && cross-env NODE_ENV=test jest --config ./test/jest-e2e.json && npm run test:integration:down",
     "heroku-postbuild": "npm run build"
   },
   "engines": {
@@ -62,6 +65,7 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
+    "cross-env": "^7.0.3",
     "typescript-eslint": "^8.20.0"
   },
   "jest": {
