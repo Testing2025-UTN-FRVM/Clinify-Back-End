@@ -31,7 +31,7 @@ describe('UsersController (integration)', () => {
     });
     db.public.registerFunction({
         name: 'version',
-        implementation: () => 'PostgreSQL 14.0',
+        implementation: () => 'PostgreSQL 17.4',
     });
 
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -48,16 +48,16 @@ describe('UsersController (integration)', () => {
         },
         }),
         TypeOrmModule.forFeature(entities),
-      ],
-      controllers: [UsersController],
-      providers: [UsersService, RolesService, PermissionsService, JwtService],
+    ],
+    controllers: [UsersController],
+    providers: [UsersService, RolesService, PermissionsService, JwtService],
     }).compile();
 
     app = moduleRef.createNestApplication();
     await app.init();
 
     userRepository = moduleRef.get<Repository<UserEntity>>(
-      getRepositoryToken(UserEntity),
+        getRepositoryToken(UserEntity),
     );
     jwtService = moduleRef.get(JwtService);
     dataSource = moduleRef.get<DataSource>(getDataSourceToken());
@@ -76,20 +76,20 @@ describe('UsersController (integration)', () => {
     const password = 'Fer#12345';
 
     await userRepository.save(
-      userRepository.create({
+        userRepository.create({
         email,
         password,
-      }),
+    }),
     );
 
     const response = await request(app.getHttpServer())
-      .post('/users/login')
-      .send({ email, password })
-      .expect(201);
+        .post('/users/login')
+        .send({ email, password })
+        .expect(201);
 
     expect(response.body).toEqual({
-      accessToken: expect.any(String),
-      refreshToken: expect.any(String),
+        accessToken: expect.any(String),
+        refreshToken: expect.any(String),
     });
 
     const payload = jwtService.getPayload(response.body.accessToken);
@@ -100,20 +100,20 @@ describe('UsersController (integration)', () => {
     const email = 'medico@example.com';
 
     await userRepository.save(
-      userRepository.create({
-        email,
-        password: 'Fer#12345',
-      }),
+        userRepository.create({
+            email,
+            password: 'Fer#12345',
+        }),
     );
 
     const response = await request(app.getHttpServer())
-      .post('/users/login')
-      .send({ email, password: 'incorrect' })
-      .expect(401);
+        .post('/users/login')
+        .send({ email, password: 'incorrect' })
+        .expect(401);
 
     expect(response.body).toMatchObject({
-      statusCode: 401,
-      message: 'Unauthorized',
+        statusCode: 401,
+        message: 'Unauthorized',
     });
     });
 });
