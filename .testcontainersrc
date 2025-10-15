@@ -1,0 +1,12 @@
+{
+  "ryuk": {
+    "disabled": false
+  },
+  "testcontainers": {
+    "ryuk": {
+      "container": {
+        "image": "testcontainers/ryuk:0.5.1"
+      }
+    }
+  }
+}

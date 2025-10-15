@@ -18,9 +18,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-  "test:integration:up": "docker compose -f docker-compose.test.yml up -d --wait",
-  "test:integration:down": "docker compose -f docker-compose.test.yml down -v",
-  "test:integration": "npm run test:integration:up && cross-env NODE_ENV=test jest --config ./test/jest-e2e.json && npm run test:integration:down",
+    "test:integration:up": "docker compose -f docker-compose.test.yml up -d --wait",
+    "test:integration:down": "docker compose -f docker-compose.test.yml down -v",
+    "test:integration": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --runInBand",
+    "test:integration:watch": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --watch --runInBand",
+    "test:integration:coverage": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --coverage --runInBand",
     "heroku-postbuild": "npm run build"
   },
   "engines": {
@@ -48,10 +50,12 @@
     "@eslint/js": "^9.18.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
+    "@testcontainers/postgresql": "^10.7.2",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
     "@types/supertest": "^6.0.2",
+    "cross-env": "^7.0.3",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
@@ -60,12 +64,12 @@
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
+    "testcontainers": "^10.7.2",
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
-    "cross-env": "^7.0.3",
     "typescript-eslint": "^8.20.0"
   },
   "jest": {
@@ -75,7 +79,9 @@
       "ts"
     ],
     "rootDir": ".",
-    "roots": ["<rootDir>/src"],
+    "roots": [
+      "<rootDir>/src"
+    ],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -89,5 +95,4 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
-  
 }
