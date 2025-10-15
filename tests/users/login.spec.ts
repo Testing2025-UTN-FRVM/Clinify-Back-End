@@ -18,36 +18,34 @@ import { UsersController } from 'src/services/users/users.controller';
 import { UsersService } from 'src/services/users/users.service';
 
 describe('UsersController (integration)', () => {
-  let app: INestApplication;
-  let userRepository: Repository<UserEntity>;
-  let jwtService: JwtService;
-  let dataSource: DataSource;
+    let app: INestApplication;
+    let userRepository: Repository<UserEntity>;
+    let jwtService: JwtService;
+    let dataSource: DataSource;
 
-  beforeAll(async () => {
+    beforeAll(async () => {
     const db = newDb({ autoCreateForeignKeyIndices: true });
     db.public.registerFunction({
-      name: 'current_database',
-      returns: 'text',
-      implementation: () => 'clinify_test',
+        name: 'current_database',
+        implementation: () => 'clinify_test',
     });
     db.public.registerFunction({
-      name: 'version',
-      returns: 'text',
-      implementation: () => 'PostgreSQL 14.0',
+        name: 'version',
+        implementation: () => 'PostgreSQL 14.0',
     });
 
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRootAsync({
-          useFactory: async () => ({
+        imports: [
+            TypeOrmModule.forRootAsync({
+            useFactory: async () => ({
             type: 'postgres',
             entities,
             synchronize: true,
-          }),
-          dataSourceFactory: async (options) => {
+        }),
+        dataSourceFactory: async (options) => {
             const dataSource = db.adapters.createTypeormDataSource(options);
             return dataSource.initialize();
-          },
+        },
         }),
         TypeOrmModule.forFeature(entities),
       ],
@@ -63,17 +61,17 @@ describe('UsersController (integration)', () => {
     );
     jwtService = moduleRef.get(JwtService);
     dataSource = moduleRef.get<DataSource>(getDataSourceToken());
-  });
+    });
 
-  afterAll(async () => {
+    afterAll(async () => {
     await app.close();
-  });
+    });
 
-  beforeEach(async () => {
+    beforeEach(async () => {
     await userRepository.createQueryBuilder().delete().execute();
-  });
+    });
 
-  it('returns tokens for valid credentials', async () => {
+    it('returns tokens for valid credentials', async () => {
     const email = 'medico@example.com';
     const password = 'Fer#12345';
 
@@ -96,9 +94,9 @@ describe('UsersController (integration)', () => {
 
     const payload = jwtService.getPayload(response.body.accessToken);
     expect(payload.email).toBe(email);
-  });
+    });
 
-  it('responds 401 for invalid password', async () => {
+    it('responds 401 for invalid password', async () => {
     const email = 'medico@example.com';
 
     await userRepository.save(
@@ -117,5 +115,5 @@ describe('UsersController (integration)', () => {
       statusCode: 401,
       message: 'Unauthorized',
     });
-  });
+    });
 });
