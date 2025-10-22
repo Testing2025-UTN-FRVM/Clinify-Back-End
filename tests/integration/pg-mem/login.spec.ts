@@ -12,7 +12,7 @@ import { PermissionsService } from 'src/services/permissions/permissions.service
 import { RolesService } from 'src/services/roles/roles.service';
 import { UsersService } from 'src/services/users/users.service';
 
-describe('UsersService (integration)', () => {
+describe('Pg-Mem - UsersService (integration)', () => {
     let moduleRef: TestingModule;
     let usersService: UsersService;
     let rolesService: RolesService;
