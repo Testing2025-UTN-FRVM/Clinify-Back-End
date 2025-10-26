@@ -133,7 +133,7 @@ describe('Testcontainers - UsersService (integration)', () => {
 
         const permission = await permissionsService.create({ code: 'USERS_ASSIGN' });
         const role = await rolesService.create({ name: 'manager' });
-        await rolesService.assignPermissions(role.id, { permissionCodes: [permission.id] } as any);
+        await rolesService.assignPermissions(role.id, { permissionCodes: [permission.id] });
 
         const updated = await usersService.assignRoles(user!.id, { roleIds: [role.id] });
 
