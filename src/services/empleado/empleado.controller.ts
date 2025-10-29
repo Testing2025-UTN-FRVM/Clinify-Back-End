@@ -6,9 +6,9 @@ import {AuthGuard} from "src/middlewares/auth.middleware";
 import * as requestUser from "src/interfaces/JWT/request-user";
 import {Permissions} from "src/middlewares/decorators/permissions.decorator";
 import {
-    AssignProcedimientosDTO,
-    PatchConsultorioDTO,
-    PatchEspecialidadDTO,
+    AssignProcedimientosEmpleadoDTO,
+    PatchConsultorioEmpleadoDTO,
+    PatchEspecialidadEmpleadoDTO,
     PatchTipoEmpleadoDTO
 } from "src/interfaces/patch/patch-empleado.dto";
 
@@ -61,21 +61,21 @@ export class EmpleadoController {
     @UseGuards(AuthGuard)
     @Permissions(['EMPLEADOS_EDIT'])
     @Patch(':id/especialidad')
-    changeEspecialidad(@Param('id') id:number, @Body() dto:PatchEspecialidadDTO): Promise<EmpleadoEntity> {
+    changeEspecialidad(@Param('id') id:number, @Body() dto:PatchEspecialidadEmpleadoDTO): Promise<EmpleadoEntity> {
         return this.empleadoService.assignEspecialidad(id,dto.idEspecialidad);
     }
 
     @UseGuards(AuthGuard)
     @Permissions(['EMPLEADOS_EDIT'])
     @Patch(':id/procedimientos')
-    assignProcedimientos(@Param('id') id:number, @Body() dto:AssignProcedimientosDTO): Promise<EmpleadoEntity> {
+    assignProcedimientos(@Param('id') id:number, @Body() dto:AssignProcedimientosEmpleadoDTO): Promise<EmpleadoEntity> {
         return this.empleadoService.assignProcedimiento(id,dto)
     }
 
     @UseGuards(AuthGuard)
     @Permissions(['EMPLEADOS_EDIT'])
     @Patch(':id/consultorio')
-    changeConsultorio(@Param('id') id:number, @Body() dto:PatchConsultorioDTO): Promise<EmpleadoEntity> {
+    changeConsultorio(@Param('id') id:number, @Body() dto:PatchConsultorioEmpleadoDTO): Promise<EmpleadoEntity> {
         return this.empleadoService.assignConsultorio(id,dto.idConsultorio);
     }
 }

@@ -9,7 +9,7 @@ import {EspecialidadService} from "../especialidad/especialidad.service";
 import {PersonaService} from "../persona/persona.service";
 import {UserEntity} from "src/entities/user.entity";
 import {ConsultorioService} from "src/services/consultorio/consultorio.service";
-import {AssignProcedimientosDTO} from "src/interfaces/patch/patch-empleado.dto";
+import {AssignProcedimientosEmpleadoDTO} from "src/interfaces/patch/patch-empleado.dto";
 import {ProcedimientoService} from "src/services/procedimiento/procedimiento.service";
 
 @Injectable()
@@ -98,7 +98,7 @@ export class EmpleadoService {
         return this.empleadoRepository.save(empleado);
     }
 
-    async assignProcedimiento(id:number, dto:AssignProcedimientosDTO): Promise<EmpleadoEntity> {
+    async assignProcedimiento(id:number, dto:AssignProcedimientosEmpleadoDTO): Promise<EmpleadoEntity> {
         const empleado = await this.findOne(id);
 
         empleado.procedimientos = await Promise.all(dto.procedimientosIds.map((procedimientoId)=> this.procedimientoService.findOne(procedimientoId)));
