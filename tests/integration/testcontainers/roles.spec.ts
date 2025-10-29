@@ -8,6 +8,7 @@ import { PermissionEntity } from 'src/entities/permission.entity';
 import { entities } from 'src/entities';
 import {NotFoundException} from "@nestjs/common";
 import {PostgreSqlContainer, StartedPostgreSqlContainer} from "@testcontainers/postgresql";
+import {CreatePermissionDTO} from "src/interfaces/create/create-permission.dto";
 
 describe('Testcontainers - RolesService (integracion)', () => {
     let moduleRef: TestingModule;
@@ -84,16 +85,20 @@ describe('Testcontainers - RolesService (integracion)', () => {
     });
 
     it('Debe asignar permisos a un rol existente', async () => {
-        const createPermission = async (code: string) =>
-            permissionsRepository.save(permissionsRepository.create({ code }));
+        const createPermission = async (code: CreatePermissionDTO) =>
+            permissionsService.create(code);
 
-        const read = await createPermission('PERMISSIONS_READ');
-        const write = await createPermission('PERMISSIONS_WRITE');
+        const read = await createPermission({code: 'PERMISSIONS_READ'});
+        const write = await createPermission({code: 'PERMISSIONS_WRITE'});
         const role = await service.create({ name: 'editor' });
 
         const updated = await service.assignPermissions(role.id, { permissionCodes: [read.id, write.id] });
 
-        expect(updated.permissions.map(permission => permission.code).sort()).toEqual([
+        expect(
+            updated.permissions
+                .map(permission => permission.code)
+                .sort((a, b) => a.localeCompare(b))
+        ).toEqual([
             'PERMISSIONS_READ',
             'PERMISSIONS_WRITE',
         ]);
