@@ -1,4 +1,15 @@
-import {Body, Controller, Get, Param, Patch, Post, Req, UseGuards} from '@nestjs/common';
+import {
+    Body,
+    ClassSerializerInterceptor,
+    Controller,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Req,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import {EmpleadoService} from "./empleado.service";
 import {RegistrarEmpleadoDTO} from "src/interfaces/register.dto";
 import {EmpleadoEntity} from "src/entities/empleado.entity";
@@ -25,6 +36,7 @@ export class EmpleadoController {
 
     @UseGuards(AuthGuard)
     @Permissions(['BASE_ACCESS'])
+    @UseInterceptors(ClassSerializerInterceptor)
     @Get('me')
     me(@Req() req: requestUser.RequestWithUser) {
         return this.empleadoService.findByUser(req.user);

@@ -10,6 +10,7 @@ import {
 import {RoleEntity} from "./role.entity";
 import { hashSync } from 'bcrypt';
 import {EmpleadoEntity} from "./empleado.entity";
+import {Exclude} from "class-transformer";
 
 @Unique('UQ_users_email',['email'])
 
@@ -21,6 +22,7 @@ export class UserEntity extends BaseEntity implements UserI {
     @Column()
     email: string;
 
+    @Exclude()
     @Column()
     password: string;
 
